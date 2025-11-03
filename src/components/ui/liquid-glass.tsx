@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import React from 'react';
+import React from "react";
 
 // Types
 interface GlassEffectProps {
@@ -20,14 +20,14 @@ interface DockIcon {
 // Glass Effect Wrapper Component
 const GlassEffect: React.FC<GlassEffectProps> = ({
   children,
-  className = '',
+  className = "",
   style = {},
   href,
-  target = '_blank',
+  target = "_blank",
 }) => {
   const glassStyle = {
-    boxShadow: '0 6px 6px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1)',
-    transitionTimingFunction: 'cubic-bezier(0.175, 0.885, 0.32, 2.2)',
+    boxShadow: "0 6px 6px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1)",
+    transitionTimingFunction: "cubic-bezier(0.175, 0.885, 0.32, 2.2)",
     ...style,
   };
 
@@ -40,20 +40,20 @@ const GlassEffect: React.FC<GlassEffectProps> = ({
       <div
         className="absolute inset-0 z-0 overflow-hidden rounded-inherit rounded-3xl"
         style={{
-          backdropFilter: 'blur(3px)',
-          filter: 'url(#glass-distortion)',
-          isolation: 'isolate',
+          backdropFilter: "blur(3px)",
+          filter: "url(#glass-distortion)",
+          isolation: "isolate",
         }}
       />
       <div
         className="absolute inset-0 z-10 rounded-inherit"
-        style={{ background: 'rgba(255, 255, 255, 0.25)' }}
+        style={{ background: "rgba(255, 255, 255, 0.25)" }}
       />
       <div
         className="absolute inset-0 z-20 rounded-inherit rounded-3xl overflow-hidden"
         style={{
           boxShadow:
-            'inset 2px 2px 1px 0 rgba(255, 255, 255, 0.5), inset -1px -1px 1px 1px rgba(255, 255, 255, 0.5)',
+            "inset 2px 2px 1px 0 rgba(255, 255, 255, 0.5), inset -1px -1px 1px 1px rgba(255, 255, 255, 0.5)",
         }}
       />
 
@@ -88,8 +88,8 @@ const GlassDock: React.FC<{ icons: DockIcon[]; href?: string }> = ({
           alt={icon.alt}
           className="w-16 h-16 transition-all duration-700 hover:scale-110 cursor-pointer"
           style={{
-            transformOrigin: 'center center',
-            transitionTimingFunction: 'cubic-bezier(0.175, 0.885, 0.32, 2.2)',
+            transformOrigin: "center center",
+            transitionTimingFunction: "cubic-bezier(0.175, 0.885, 0.32, 2.2)",
           }}
           onClick={icon.onClick}
         />
@@ -98,9 +98,29 @@ const GlassDock: React.FC<{ icons: DockIcon[]; href?: string }> = ({
   </GlassEffect>
 );
 
+// Button Component
+const GlassButton: React.FC<{ children: React.ReactNode; href?: string }> = ({
+  children,
+  href,
+}) => (
+  <GlassEffect
+    href={href}
+    className="rounded-3xl px-10 py-6 hover:px-11 hover:py-7 hover:rounded-4xl overflow-hidden"
+  >
+    <div
+      className="transition-all duration-700 hover:scale-95"
+      style={{
+        transitionTimingFunction: "cubic-bezier(0.175, 0.885, 0.32, 2.2)",
+      }}
+    >
+      {children}
+    </div>
+  </GlassEffect>
+);
+
 // SVG Filter Component
 const GlassFilter: React.FC = () => (
-  <svg style={{ display: 'none' }}>
+  <svg style={{ display: "none" }}>
     <filter
       id="glass-distortion"
       x="0%"
@@ -151,73 +171,55 @@ const GlassFilter: React.FC = () => (
     </filter>
   </svg>
 );
-
-function Hero() {
-  const sections = [
-    { id: 'hero', label: 'Accueil' },
-    { id: 'about', label: 'À propos' },
-    { id: 'portfolio', label: 'Réalisations' },
-    { id: 'contact', label: 'Contact' },
-  ];
-
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
+// Main Component
+export const Component = () => {
   const dockIcons: DockIcon[] = [
     {
-      src: 'https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/a13d1acfd046f503f987c1c95af582c8_low_res_Claude.png',
-      alt: 'Claude',
+      src: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/a13d1acfd046f503f987c1c95af582c8_low_res_Claude.png",
+      alt: "Claude",
     },
     {
-      src: 'https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/9e80c50a5802d3b0a7ec66f3fe4ce348_low_res_Finder.png',
-      alt: 'Finder',
+      src: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/9e80c50a5802d3b0a7ec66f3fe4ce348_low_res_Finder.png",
+      alt: "Finder",
     },
     {
-      src: 'https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/c2c4a538c2d42a8dc0927d7d6530d125_low_res_ChatGPT___Liquid_Glass__Default_.png',
-      alt: 'Chatgpt',
+      src: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/c2c4a538c2d42a8dc0927d7d6530d125_low_res_ChatGPT___Liquid_Glass__Default_.png",
+      alt: "Chatgpt",
     },
     {
-      src: 'https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/6d26d432bd65c522b0708185c0768ec3_low_res_Maps.png',
-      alt: 'Maps',
+      src: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/6d26d432bd65c522b0708185c0768ec3_low_res_Maps.png",
+      alt: "Maps",
     },
     {
-      src: 'https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/7c59c945731aecf4f91eb8c2c5f867ce_low_res_Safari.png',
-      alt: 'Safari',
+      src: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/7c59c945731aecf4f91eb8c2c5f867ce_low_res_Safari.png",
+      alt: "Safari",
     },
     {
-      src: 'https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/b7f24edc7183f63dbe34c1943bef2967_low_res_Steam___Liquid_Glass__Default_.png',
-      alt: 'Steam',
+      src: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/b7f24edc7183f63dbe34c1943bef2967_low_res_Steam___Liquid_Glass__Default_.png",
+      alt: "Steam",
     },
   ];
 
   return (
     <div
-      id="hero"
-      className="min-h-screen w-full bg-white flex flex-col items-center font-light relative overflow-hidden"
+      className="min-h-screen h-full flex items-center justify-center font-light relative overflow-hidden w-full"
+      style={{
+        background: `url("https://images.unsplash.com/photo-1432251407527-504a6b4174a2?q=80&w=1480&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D") center center`,
+        animation: "moveBackground 60s linear infinite",
+      }}
     >
       <GlassFilter />
 
-      <nav className="mt-10 flex flex-wrap items-center gap-3 px-6 py-2.5 rounded-3xl border border-slate-200 bg-white/80 text-slate-900 backdrop-blur-xl shadow-2xl">
-        {sections.map((section) => (
-          <button
-            key={section.id}
-            onClick={() => scrollToSection(section.id)}
-            className="px-4 py-1.5 rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-400 hover:text-transparent hover:bg-clip-text hover:bg-[linear-gradient(90deg,#00c6ff,#7f7fd5,#e684ae,#ffb347,#ffe47a)]"
-          >
-            {section.label}
-          </button>
-        ))}
-      </nav>
-
-      <div className="flex flex-1 w-full items-end justify-center pb-12">
+      <div className="flex flex-col gap-6 items-center justify-center w-full">
         <GlassDock icons={dockIcons} href="https://x.com/notsurajgaud" />
-      </div>
+
+        <GlassButton href="https://x.com/notsurajgaud">
+          <div className="text-xl text-white">
+            <p>How can i help you today?</p>
+          </div>
+        </GlassButton>
+      </div>     
     </div>
   );
 }
 
-export default Hero;
