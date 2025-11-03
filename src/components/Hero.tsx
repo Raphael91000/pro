@@ -164,51 +164,55 @@ const GlassEffect: React.FC<GlassEffectProps> = ({
 };
 
 // Dock Component
+// Dock Component – style macOS
 const GlassDock: React.FC<{ icons: DockIcon[] }> = ({ icons }) => (
-  <GlassEffect className="rounded-3xl p-3 hover:p-4 hover:rounded-4xl">
-    <div className="flex items-center justify-center gap-2 rounded-3xl p-3 py-0 px-0.5 overflow-hidden">
-      {icons.map((icon, index) => (
-        icon.href ? (
-          <a
+  <GlassEffect className="rounded-3xl p-2 hover:p-3 hover:rounded-4xl">
+    <div className="flex items-center justify-center gap-2.5 p-2">
+      {icons.map((icon, index) => {
+        const IconWrapper = icon.href ? 'a' : 'button';
+        const props = icon.href
+          ? {
+              href: icon.href,
+              target: '_blank',
+              rel: 'noopener noreferrer',
+              onClick: icon.onClick,
+            }
+          : {
+              type: 'button',
+              onClick: icon.onClick,
+            };
+
+        return (
+          <IconWrapper
             key={index}
-            href={icon.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={icon.onClick}
-            className="flex items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-500 rounded-2xl"
+            {...props}
+            className="group flex items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-500 transition-all duration-500"
           >
-            <img
-              src={icon.src}
-              alt={icon.alt}
-              className="w-14 h-14 rounded-2xl object-contain transition-all duration-700 hover:scale-110 cursor-pointer"
-              style={{
-                transformOrigin: 'center center',
-                transitionTimingFunction: 'cubic-bezier(0.175, 0.885, 0.32, 2.2)',
-              }}
-            />
-          </a>
-        ) : (
-          <button
-            type="button"
-            key={index}
-            onClick={icon.onClick}
-            className="flex items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-500 rounded-2xl"
-          >
-            <img
-              src={icon.src}
-              alt={icon.alt}
-              className="w-14 h-14 rounded-2xl object-contain transition-all duration-700 hover:scale-110 cursor-pointer"
-              style={{
-                transformOrigin: 'center center',
-                transitionTimingFunction: 'cubic-bezier(0.175, 0.885, 0.32, 2.2)',
-              }}
-            />
-          </button>
-        )
-      ))}
+            <div className="w-[3.5rem] h-[3.5rem] flex items-center justify-center rounded-2xl bg-white/10 backdrop-blur-md shadow-md ring-1 ring-white/30 overflow-hidden transition-all duration-500 group-hover:scale-110 group-hover:-translate-y-1 group-hover:bg-white/30">
+              <img
+                src={icon.src}
+                alt={icon.alt}
+                className="w-full h-full object-cover select-none pointer-events-none transition-transform duration-500 group-hover:scale-105"
+                style={{
+                  borderRadius: '0.75rem', // ajusté à la nouvelle taille
+                  transitionTimingFunction: 'cubic-bezier(0.175, 0.885, 0.32, 2.2)',
+                }}
+              />
+            </div>
+          </IconWrapper>
+        );
+      })}
     </div>
   </GlassEffect>
 );
+
+
+
+
+
+
+
+
 
 // SVG Filter Component
 const GlassFilter: React.FC = () => (
