@@ -7,7 +7,8 @@ import Footer from './components/Footer';
 function App() {
   return (
     <div className="min-h-screen bg-white">
-      <main>
+      {/* Header supprimé pour laisser place à la navbar transparente intégrée dans Hero */}
+      <main className="">
         <Hero />
         <About />
         <Portfolio />
