@@ -392,7 +392,7 @@ function Hero() {
           </GlassEffect>
         </div>
 
-        <div className="mt-auto flex w-full justify-center pb-12">
+        <div className="mt-auto flex w-full justify-center pb-8 translate-y-2">
           <div className="relative" ref={dockRef}>
             <GlassDock icons={dockIcons} />
             {isCvMenuOpen && (
