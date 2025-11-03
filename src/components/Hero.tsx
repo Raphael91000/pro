@@ -2,6 +2,10 @@
 
 import React from 'react';
 
+import cvLogo from '../assets/logos/cv.svg';
+import fiverrLogo from '../assets/logos/fiverr.svg';
+import githubLogo from '../assets/logos/github.svg';
+
 const AnimatedBlobs: React.FC = () => {
   const blobStyle = {
     '--border-radius': '115% 140% 145% 110% / 125% 140% 110% 125%',
@@ -100,7 +104,8 @@ interface GlassEffectProps {
 interface DockIcon {
   src: string;
   alt: string;
-  href: string;
+  href?: string;
+  onClick?: () => void;
 }
 
 // Glass Effect Wrapper Component
@@ -163,23 +168,43 @@ const GlassDock: React.FC<{ icons: DockIcon[] }> = ({ icons }) => (
   <GlassEffect className="rounded-3xl p-3 hover:p-4 hover:rounded-4xl">
     <div className="flex items-center justify-center gap-2 rounded-3xl p-3 py-0 px-0.5 overflow-hidden">
       {icons.map((icon, index) => (
-        <a
-          key={index}
-          href={icon.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center justify-center"
-        >
-          <img
-            src={icon.src}
-            alt={icon.alt}
-            className="w-16 h-16 transition-all duration-700 hover:scale-110 cursor-pointer object-contain"
-            style={{
-              transformOrigin: 'center center',
-              transitionTimingFunction: 'cubic-bezier(0.175, 0.885, 0.32, 2.2)',
-            }}
-          />
-        </a>
+        icon.href ? (
+          <a
+            key={index}
+            href={icon.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={icon.onClick}
+            className="flex items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-500 rounded-2xl"
+          >
+            <img
+              src={icon.src}
+              alt={icon.alt}
+              className="w-14 h-14 rounded-2xl object-contain transition-all duration-700 hover:scale-110 cursor-pointer"
+              style={{
+                transformOrigin: 'center center',
+                transitionTimingFunction: 'cubic-bezier(0.175, 0.885, 0.32, 2.2)',
+              }}
+            />
+          </a>
+        ) : (
+          <button
+            type="button"
+            key={index}
+            onClick={icon.onClick}
+            className="flex items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-500 rounded-2xl"
+          >
+            <img
+              src={icon.src}
+              alt={icon.alt}
+              className="w-14 h-14 rounded-2xl object-contain transition-all duration-700 hover:scale-110 cursor-pointer"
+              style={{
+                transformOrigin: 'center center',
+                transitionTimingFunction: 'cubic-bezier(0.175, 0.885, 0.32, 2.2)',
+              }}
+            />
+          </button>
+        )
       ))}
     </div>
   </GlassEffect>
@@ -240,6 +265,58 @@ const GlassFilter: React.FC = () => (
 );
 
 function Hero() {
+  const [isCvMenuOpen, setIsCvMenuOpen] = React.useState(false);
+  const dockRef = React.useRef<HTMLDivElement | null>(null);
+  const closeCvMenu = React.useCallback(() => setIsCvMenuOpen(false), []);
+
+  const cvOptions = React.useMemo(
+    () => [
+      { label: 'CV Français', href: '/CV-RAPHAEL-FR.pdf' },
+      { label: 'CV Anglais', href: '/CV-RAPHAEL-EN.pdf' },
+      { label: 'CV Arabe', href: '/CV-RAPHAEL-AR.pdf' },
+      { label: 'CV Complet (EN)', href: '/CV-COMPLET-EN.pdf' },
+    ],
+    []
+  );
+
+  React.useEffect(() => {
+    if (!isCvMenuOpen) {
+      return;
+    }
+
+    const handleClickAway = (event: MouseEvent) => {
+      if (
+        dockRef.current &&
+        !dockRef.current.contains(event.target as Node)
+      ) {
+        setIsCvMenuOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsCvMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickAway);
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickAway);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isCvMenuOpen]);
+
+  const handleCvSelect = (href: string) => {
+    window.open(href, '_blank', 'noopener,noreferrer');
+    setIsCvMenuOpen(false);
+  };
+
+  const handleCvIconClick = () => {
+    setIsCvMenuOpen((prev) => !prev);
+  };
+
   const sections = [
     { id: 'hero', label: 'Accueil' },
     { id: 'about', label: 'À propos' },
@@ -256,19 +333,27 @@ function Hero() {
 
   const dockIcons: DockIcon[] = [
     {
-      src: 'https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/a13d1acfd046f503f987c1c95af582c8_low_res_Claude.png',
+      src: 'https://cdn-icons-png.flaticon.com/512/174/174857.png',
       alt: 'LinkedIn',
       href: 'https://www.linkedin.com/in/raphael-theuillon-689139261/',
+      onClick: closeCvMenu,
     },
     {
-      src: 'https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/9e80c50a5802d3b0a7ec66f3fe4ce348_low_res_Finder.png',
+      src: fiverrLogo,
       alt: 'Fiverr',
       href: 'https://www.fiverr.com/users/raph910/seller_dashboard',
+      onClick: closeCvMenu,
     },
     {
-      src: 'https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/c2c4a538c2d42a8dc0927d7d6530d125_low_res_ChatGPT___Liquid_Glass__Default_.png',
+      src: githubLogo,
       alt: 'GitHub',
       href: 'https://github.com/Raphael91000',
+      onClick: closeCvMenu,
+    },
+    {
+      src: cvLogo,
+      alt: 'CV',
+      onClick: handleCvIconClick,
     },
   ];
 
@@ -304,7 +389,28 @@ function Hero() {
         </div>
 
         <div className="mt-auto flex w-full justify-center pb-12">
-          <GlassDock icons={dockIcons} />
+          <div className="relative" ref={dockRef}>
+            <GlassDock icons={dockIcons} />
+            {isCvMenuOpen && (
+              <div className="absolute bottom-full left-1/2 z-50 mb-4 w-56 -translate-x-1/2">
+                <GlassEffect className="rounded-2xl px-4 py-3">
+                  <ul className="flex flex-col gap-2 text-sm text-slate-800">
+                    {cvOptions.map((option) => (
+                      <li key={option.href}>
+                        <button
+                          type="button"
+                          onClick={() => handleCvSelect(option.href)}
+                          className="w-full rounded-xl bg-white/60 px-3 py-2 text-left transition-colors duration-200 hover:bg-white/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-500"
+                        >
+                          {option.label}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </GlassEffect>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -2,6 +2,10 @@
 
 import React from "react";
 
+import cvLogo from "../../assets/logos/cv.svg";
+import fiverrLogo from "../../assets/logos/fiverr.svg";
+import githubLogo from "../../assets/logos/github.svg";
+
 // Types
 interface GlassEffectProps {
   children: React.ReactNode;
@@ -86,7 +90,7 @@ const GlassDock: React.FC<{ icons: DockIcon[]; href?: string }> = ({
           key={index}
           src={icon.src}
           alt={icon.alt}
-          className="w-16 h-16 transition-all duration-700 hover:scale-110 cursor-pointer"
+          className="w-14 h-14 rounded-2xl object-contain transition-all duration-700 hover:scale-110 cursor-pointer"
           style={{
             transformOrigin: "center center",
             transitionTimingFunction: "cubic-bezier(0.175, 0.885, 0.32, 2.2)",
@@ -173,10 +177,74 @@ const GlassFilter: React.FC = () => (
 );
 // Main Component
 export const Component = () => {
+  const [isCvMenuOpen, setIsCvMenuOpen] = React.useState(false);
+  const dockRef = React.useRef<HTMLDivElement | null>(null);
+
+  const cvOptions = React.useMemo(
+    () => [
+      { label: "CV Français", href: "/CV-RAPHAEL-FR.pdf" },
+      { label: "CV Anglais", href: "/CV-RAPHAEL-EN.pdf" },
+      { label: "CV Arabe", href: "/CV-RAPHAEL-AR.pdf" },
+      { label: "CV Complet (EN)", href: "/CV-COMPLET-EN.pdf" },
+    ],
+    []
+  );
+
+  React.useEffect(() => {
+    if (!isCvMenuOpen) {
+      return;
+    }
+
+    const handleClickAway = (event: MouseEvent) => {
+      if (
+        dockRef.current &&
+        !dockRef.current.contains(event.target as Node)
+      ) {
+        setIsCvMenuOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsCvMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickAway);
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickAway);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isCvMenuOpen]);
+
+  const handleCvSelect = (href: string) => {
+    window.open(href, "_blank", "noopener,noreferrer");
+    setIsCvMenuOpen(false);
+  };
+
+  const handleCvIconClick = () => {
+    setIsCvMenuOpen((prev) => !prev);
+  };
+
   const dockIcons: DockIcon[] = [
     {
-      src: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/a13d1acfd046f503f987c1c95af582c8_low_res_Claude.png",
-      alt: "Claude",
+      src: "https://cdn-icons-png.flaticon.com/512/174/174857.png",
+      alt: "LinkedIn",
+    },
+    {
+      src: fiverrLogo,
+      alt: "Fiverr",
+    },
+    {
+      src: githubLogo,
+      alt: "GitHub",
+    },
+    {
+      src: cvLogo,
+      alt: "CV",
+      onClick: handleCvIconClick,
     },
     {
       src: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/9e80c50a5802d3b0a7ec66f3fe4ce348_low_res_Finder.png",
@@ -211,7 +279,28 @@ export const Component = () => {
       <GlassFilter />
 
       <div className="flex flex-col gap-6 items-center justify-center w-full">
-        <GlassDock icons={dockIcons} href="https://x.com/notsurajgaud" />
+        <div className="relative" ref={dockRef}>
+          <GlassDock icons={dockIcons} />
+          {isCvMenuOpen && (
+            <div className="absolute bottom-full left-1/2 z-50 mb-4 w-56 -translate-x-1/2">
+              <GlassEffect className="rounded-2xl px-4 py-3">
+                <ul className="flex flex-col gap-2 text-sm text-slate-800">
+                  {cvOptions.map((option) => (
+                    <li key={option.href}>
+                      <button
+                        type="button"
+                        onClick={() => handleCvSelect(option.href)}
+                        className="w-full rounded-xl bg-white/60 px-3 py-2 text-left transition-colors duration-200 hover:bg-white/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-500"
+                      >
+                        {option.label}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </GlassEffect>
+            </div>
+          )}
+        </div>
 
         <GlassButton href="https://x.com/notsurajgaud">
           <div className="text-xl text-white">
@@ -222,5 +311,3 @@ export const Component = () => {
     </div>
   );
 }
-
-
