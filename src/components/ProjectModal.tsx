@@ -1,6 +1,5 @@
 import { X, ExternalLink, Github, CheckCircle2 } from 'lucide-react';
 import { useEffect } from 'react';
-import { Project } from './Portfolio';
 
 interface ProjectModalProps {
   project: Project;
