@@ -17,7 +17,7 @@ fifthColor = "138, 180, 255",  // bleu pastel
 
   pointerColor = "140, 100, 255",
   size = "30%",
-  blendingValue = "hard-light",
+  blendingValue = "overlay",
   children,
   className,
   interactive = true,

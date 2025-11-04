@@ -1,14 +1,16 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import cvLogo from '../assets/logos/cv.svg';
 import fiverrLogo from '../assets/logos/fiverr.svg';
 import githubLogo from '../assets/logos/github.svg';
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
 
-
-const AnimatedBlobs: React.FC = () => {
+const AnimatedBlobs: React.FC<{ scrollProgress: number }> = ({ scrollProgress }) => {
+  // Calcul du scale basé sur le scroll (de 1 à 5 pour un zoom très rapide)
+  const scale = 1 + scrollProgress * 4;
+  
   const blobStyle = {
     '--border-radius': '115% 140% 145% 110% / 125% 140% 110% 125%',
     '--border-width': '5vmin',
@@ -51,14 +53,31 @@ const AnimatedBlobs: React.FC = () => {
     },
   ];
 
+  // Opacité du texte et des blobs : disparaît progressivement
+  const textOpacity = Math.max(0, 1 - scrollProgress * 3);
+  const blobOpacity = Math.max(0, 1 - scrollProgress * 1.5);
+
   return (
-    <div className="pointer-events-none relative flex min-h-screen w-full items-center justify-center overflow-hidden">
- <span className="absolute z-10 flex flex-col items-center text-center text-5xl md:text-5xl font-semibold leading-tight tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.15)] font-[SF Pro Display] space-y-2 select-none">
-  <span className="block text-slate-900/90">Welcome to my</span>
-  <span className="block bg-[linear-gradient(90deg,#00c6ff,#7f7fd5,#e684ae,#ffb347,#ffe47a)] bg-clip-text text-transparent font-bold">
-    Portfolio
-  </span>
-</span>
+    <div 
+      className="pointer-events-none relative flex min-h-screen w-full items-center justify-center overflow-hidden"
+      style={{
+        transform: `scale(${scale})`,
+        opacity: blobOpacity,
+        transition: 'transform 0.05s ease-out, opacity 0.1s ease-out',
+      }}
+    >
+      <span 
+        className="absolute z-10 flex flex-col items-center text-center text-5xl md:text-5xl font-semibold leading-tight tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.15)] font-[SF Pro Display] space-y-2 select-none"
+        style={{
+          opacity: textOpacity,
+          transition: 'opacity 0.05s ease-out',
+        }}
+      >
+        <span className="block text-slate-900/90">Welcome to my</span>
+        <span className="block bg-[linear-gradient(90deg,#00c6ff,#7f7fd5,#e684ae,#ffb347,#ffe47a)] bg-clip-text text-transparent font-bold">
+          Portfolio
+        </span>
+      </span>
 
       <div className="grid" style={{ gridTemplateAreas: "'stack'" }}>
         <div
@@ -93,9 +112,6 @@ const AnimatedBlobs: React.FC = () => {
     </div>
   );
 };
-
-
-
 
 // Types
 interface GlassEffectProps {
@@ -170,7 +186,6 @@ const GlassEffect: React.FC<GlassEffectProps> = ({
 };
 
 // Dock Component
-// Dock Component – style macOS
 const GlassDock: React.FC<{ icons: DockIcon[] }> = ({ icons }) => (
   <GlassEffect className="rounded-3xl p-2 hover:p-3 hover:rounded-4xl">
     <div className="flex items-center justify-center gap-2.5 p-2">
@@ -200,7 +215,7 @@ const GlassDock: React.FC<{ icons: DockIcon[] }> = ({ icons }) => (
                 alt={icon.alt}
                 className="w-full h-full object-cover select-none pointer-events-none transition-transform duration-500 group-hover:scale-105"
                 style={{
-                  borderRadius: '0.75rem', // ajusté à la nouvelle taille
+                  borderRadius: '0.75rem',
                   transitionTimingFunction: 'cubic-bezier(0.175, 0.885, 0.32, 2.2)',
                 }}
               />
@@ -211,14 +226,6 @@ const GlassDock: React.FC<{ icons: DockIcon[] }> = ({ icons }) => (
     </div>
   </GlassEffect>
 );
-
-
-
-
-
-
-
-
 
 // SVG Filter Component
 const GlassFilter: React.FC = () => (
@@ -276,7 +283,9 @@ const GlassFilter: React.FC = () => (
 
 function Hero() {
   const [isCvMenuOpen, setIsCvMenuOpen] = React.useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const dockRef = React.useRef<HTMLDivElement | null>(null);
+  const spacerRef = React.useRef<HTMLDivElement | null>(null);
   const closeCvMenu = React.useCallback(() => setIsCvMenuOpen(false), []);
 
   const cvOptions = React.useMemo(
@@ -288,6 +297,33 @@ function Hero() {
     ],
     []
   );
+
+  // Gestion du scroll pour l'effet de zoom (bidirectionnel et fluide)
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!spacerRef.current) return;
+
+      const spacerRect = spacerRef.current.getBoundingClientRect();
+      const spacerHeight = spacerRef.current.offsetHeight;
+      
+      // Calcul basé sur la position du spacer
+      // Quand le spacer est en haut de l'écran, progress = 0
+      // Quand le spacer est complètement scrollé, progress = 1
+      const scrolledInSpacer = -spacerRect.top;
+      const progress = Math.max(0, Math.min(scrolledInSpacer / (spacerHeight * 0.4), 1));
+      
+      setScrollProgress(progress);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    // Appel initial pour gérer le cas où on revient en arrière
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   React.useEffect(() => {
     if (!isCvMenuOpen) {
@@ -367,71 +403,109 @@ function Hero() {
     },
   ];
 
-    return (
-    <div
-      id="hero"
-      className="relative flex min-h-screen w-full flex-col items-center overflow-hidden bg-white font-light"
-    >
-      <GlassFilter />
+  // Opacité des éléments UI basée sur la progression
+  const uiOpacity = Math.max(0, 1 - scrollProgress * 2);
 
-      {/* 🌈 Fond animé (lucioles colorées) */}
-      <div className="absolute inset-0 z-0">
-        <BackgroundGradientAnimation />
-      </div>
+  // Déterminer si on doit afficher le hero (toujours visible tant que scrollProgress > 0)
+  const showHero = scrollProgress < 1;
 
-      {/* 🔵 Blob avec le texte */}
-      <div className="pointer-events-none absolute inset-0 z-10">
-        <AnimatedBlobs />
-      </div>
+  return (
+    <>
+      {/* Spacer invisible pour créer l'espace de scroll nécessaire - EN PREMIER */}
+      <div 
+        id="hero"
+        ref={spacerRef}
+        style={{ 
+          height: '200vh', // 2x la hauteur de l'écran pour l'effet de zoom
+          pointerEvents: 'none',
+          position: 'relative',
+        }} 
+      />
 
-      {/* 🌟 Le contenu principal */}
-      <div className="relative z-20 flex min-h-screen w-full flex-col items-center">
-        <div className="mt-10 flex w-full justify-center px-6">
-          <GlassEffect
-            className="items-center gap-3 rounded-3xl px-6 py-2.5 text-slate-900 shadow-2xl cursor-default"
-            overlayColor="rgba(255, 255, 255, 0.12)"
+      {/* Hero section - fixed, toujours visible pendant le scroll dans le spacer */}
+      {showHero && (
+        <div
+          className="fixed inset-0 flex min-h-screen w-full flex-col items-center overflow-hidden bg-white font-light"
+          style={{
+            zIndex: 50,
+          }}
+        >
+          <GlassFilter />
+
+          {/* 🌈 Fond animé (lucioles colorées) */}
+          <div 
+            className="absolute inset-0 z-0"
+            style={{
+              opacity: 1 - scrollProgress,
+              transition: 'opacity 0.1s ease-out',
+            }}
           >
-            <nav className="flex flex-wrap items-center gap-3">
-              {sections.map((section) => (
-                <button
-                  key={section.id}
-                  onClick={() => scrollToSection(section.id)}
-                  className="rounded-full px-4 py-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-400 hover:bg-[linear-gradient(90deg,#00c6ff,#7f7fd5,#e684ae,#ffb347,#ffe47a)] hover:bg-clip-text hover:text-transparent"
-                >
-                  {section.label}
-                </button>
-              ))}
-            </nav>
-          </GlassEffect>
-        </div>
+            <BackgroundGradientAnimation />
+          </div>
 
-        <div className="mt-auto flex w-full justify-center pb-8 translate-y-2">
-          <div className="relative" ref={dockRef}>
-            <GlassDock icons={dockIcons} />
-            {isCvMenuOpen && (
-              <div className="absolute bottom-full left-1/2 z-50 mb-4 w-56 -translate-x-1/2">
-                <GlassEffect className="rounded-2xl px-4 py-3">
-                  <ul className="flex flex-col gap-2 text-sm text-slate-800">
-                    {cvOptions.map((option) => (
-                      <li key={option.href}>
-                        <button
-                          type="button"
-                          onClick={() => handleCvSelect(option.href)}
-                          className="w-full rounded-xl bg-white/60 px-3 py-2 text-left transition-colors duration-200 hover:bg-white/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-500"
-                        >
-                          {option.label}
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </GlassEffect>
+          {/* 🔵 Blob avec le texte et l'effet de zoom */}
+          <div className="pointer-events-none absolute inset-0 z-10">
+            <AnimatedBlobs scrollProgress={scrollProgress} />
+          </div>
+
+          {/* 🌟 Le contenu principal */}
+          <div 
+            className="relative z-20 flex min-h-screen w-full flex-col items-center"
+            style={{
+              opacity: uiOpacity,
+              transition: 'opacity 0.1s ease-out',
+            }}
+          >
+            <div className="mt-10 flex w-full justify-center px-6">
+              <GlassEffect
+                className="items-center gap-3 rounded-3xl px-6 py-2.5 text-slate-900 shadow-2xl cursor-default"
+                overlayColor="rgba(255, 255, 255, 0.12)"
+              >
+                <nav className="flex flex-wrap items-center gap-3">
+                  {sections.map((section) => (
+                    <button
+                      key={section.id}
+                      onClick={() => scrollToSection(section.id)}
+                      className="rounded-full px-4 py-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-400 hover:bg-[linear-gradient(90deg,#00c6ff,#7f7fd5,#e684ae,#ffb347,#ffe47a)] hover:bg-clip-text hover:text-transparent"
+                    >
+                      {section.label}
+                    </button>
+                  ))}
+                </nav>
+              </GlassEffect>
+            </div>
+
+            <div className="mt-auto flex w-full justify-center pb-8 translate-y-2">
+              <div className="relative" ref={dockRef}>
+                <GlassDock icons={dockIcons} />
+                {isCvMenuOpen && (
+                  <div className="absolute bottom-full left-1/2 z-50 mb-4 w-56 -translate-x-1/2">
+                    <GlassEffect className="rounded-2xl px-4 py-3">
+                      <ul className="flex flex-col gap-2 text-sm text-slate-800">
+                        {cvOptions.map((option) => (
+                          <li key={option.href}>
+                            <button
+                              type="button"
+                              onClick={() => handleCvSelect(option.href)}
+                              className="w-full rounded-xl bg-white/60 px-3 py-2 text-left transition-colors duration-200 hover:bg-white/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-500"
+                            >
+                              {option.label}
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    </GlassEffect>
+                  </div>
+                )}
               </div>
-            )}
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  ); // ✅ juste une fermeture ici
-} // ✅ fermeture de la fonction
+      )}
 
-export default Hero; // ✅ export au top level
+      {/* 🎯 Overlay de transition - SUPPRIMÉ pour enlever la lumière blanche */}
+    </>
+  );
+}
+
+export default Hero;
