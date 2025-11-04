@@ -5,6 +5,8 @@ import React from 'react';
 import cvLogo from '../assets/logos/cv.svg';
 import fiverrLogo from '../assets/logos/fiverr.svg';
 import githubLogo from '../assets/logos/github.svg';
+import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
+
 
 const AnimatedBlobs: React.FC = () => {
   const blobStyle = {
@@ -22,7 +24,7 @@ const AnimatedBlobs: React.FC = () => {
     maskClip: 'padding-box, border-box',
     maskComposite: 'intersect',
     mixBlendMode: 'screen' as const,
-    height: '80vmin',
+    height: '70vmin',
     filter: 'blur(1vmin)',
   } as React.CSSProperties;
 
@@ -51,12 +53,13 @@ const AnimatedBlobs: React.FC = () => {
 
   return (
     <div className="pointer-events-none relative flex min-h-screen w-full items-center justify-center overflow-hidden">
-      <span className="absolute z-10 whitespace-pre-wrap text-center text-6xl font-semibold leading-tight tracking-tighter drop-shadow-xl">
-        <span className="block text-black">Welcome to my</span>
-        <span className="block bg-[linear-gradient(90deg,#00c6ff,#7f7fd5,#e684ae,#ffb347,#ffe47a)] bg-clip-text text-transparent">
-          Portfolio
-        </span>
-      </span>
+ <span className="absolute z-10 flex flex-col items-center text-center text-5xl md:text-5xl font-semibold leading-tight tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.15)] font-[SF Pro Display] space-y-2 select-none">
+  <span className="block text-slate-900/90">Welcome to my</span>
+  <span className="block bg-[linear-gradient(90deg,#00c6ff,#7f7fd5,#e684ae,#ffb347,#ffe47a)] bg-clip-text text-transparent font-bold">
+    Portfolio
+  </span>
+</span>
+
       <div className="grid" style={{ gridTemplateAreas: "'stack'" }}>
         <div
           className="relative grid"
@@ -90,6 +93,9 @@ const AnimatedBlobs: React.FC = () => {
     </div>
   );
 };
+
+
+
 
 // Types
 interface GlassEffectProps {
@@ -361,17 +367,24 @@ function Hero() {
     },
   ];
 
-  return (
+    return (
     <div
       id="hero"
       className="relative flex min-h-screen w-full flex-col items-center overflow-hidden bg-white font-light"
     >
       <GlassFilter />
 
-      <div className="pointer-events-none absolute inset-0 z-0">
+      {/* 🌈 Fond animé (lucioles colorées) */}
+      <div className="absolute inset-0 z-0">
+        <BackgroundGradientAnimation />
+      </div>
+
+      {/* 🔵 Blob avec le texte */}
+      <div className="pointer-events-none absolute inset-0 z-10">
         <AnimatedBlobs />
       </div>
 
+      {/* 🌟 Le contenu principal */}
       <div className="relative z-20 flex min-h-screen w-full flex-col items-center">
         <div className="mt-10 flex w-full justify-center px-6">
           <GlassEffect
@@ -418,7 +431,7 @@ function Hero() {
         </div>
       </div>
     </div>
-  );
-}
+  ); // ✅ juste une fermeture ici
+} // ✅ fermeture de la fonction
 
-export default Hero;
+export default Hero; // ✅ export au top level
