@@ -1,14 +1,12 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-
 import cvLogo from '../assets/logos/cv.svg';
 import fiverrLogo from '../assets/logos/fiverr.svg';
 import githubLogo from '../assets/logos/github.svg';
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
 
 const AnimatedBlobs: React.FC<{ scrollProgress: number }> = ({ scrollProgress }) => {
-  // Calcul du scale basé sur le scroll (de 1 à 5 pour un zoom très rapide)
   const scale = 1 + scrollProgress * 4;
   
   const blobStyle = {
@@ -53,7 +51,6 @@ const AnimatedBlobs: React.FC<{ scrollProgress: number }> = ({ scrollProgress })
     },
   ];
 
-  // Opacité du texte et des blobs : disparaît progressivement
   const textOpacity = Math.max(0, 1 - scrollProgress * 3);
   const blobOpacity = Math.max(0, 1 - scrollProgress * 1.5);
 
@@ -113,7 +110,6 @@ const AnimatedBlobs: React.FC<{ scrollProgress: number }> = ({ scrollProgress })
   );
 };
 
-// Types
 interface GlassEffectProps {
   children: React.ReactNode;
   className?: string;
@@ -130,7 +126,6 @@ interface DockIcon {
   onClick?: () => void;
 }
 
-// Glass Effect Wrapper Component
 const GlassEffect: React.FC<GlassEffectProps> = ({
   children,
   className = '',
@@ -150,7 +145,6 @@ const GlassEffect: React.FC<GlassEffectProps> = ({
       className={`relative flex font-semibold overflow-hidden text-black cursor-pointer transition-all duration-700 ${className}`}
       style={glassStyle}
     >
-      {/* Glass Layers */}
       <div
         className="absolute inset-0 z-0 overflow-hidden rounded-inherit rounded-3xl"
         style={{
@@ -170,8 +164,6 @@ const GlassEffect: React.FC<GlassEffectProps> = ({
             'inset 2px 2px 1px 0 rgba(255, 255, 255, 0.5), inset -1px -1px 1px 1px rgba(255, 255, 255, 0.5)',
         }}
       />
-
-      {/* Content */}
       <div className="relative z-30">{children}</div>
     </div>
   );
@@ -185,7 +177,6 @@ const GlassEffect: React.FC<GlassEffectProps> = ({
   );
 };
 
-// Dock Component
 const GlassDock: React.FC<{ icons: DockIcon[] }> = ({ icons }) => (
   <GlassEffect className="rounded-3xl p-2 hover:p-3 hover:rounded-4xl">
     <div className="flex items-center justify-center gap-2.5 p-2">
@@ -227,7 +218,6 @@ const GlassDock: React.FC<{ icons: DockIcon[] }> = ({ icons }) => (
   </GlassEffect>
 );
 
-// SVG Filter Component
 const GlassFilter: React.FC = () => (
   <svg style={{ display: 'none' }}>
     <filter
@@ -298,7 +288,6 @@ function Hero() {
     []
   );
 
-  // Gestion du scroll pour l'effet de zoom (bidirectionnel et fluide)
   useEffect(() => {
     const handleScroll = () => {
       if (!spacerRef.current) return;
@@ -306,9 +295,6 @@ function Hero() {
       const spacerRect = spacerRef.current.getBoundingClientRect();
       const spacerHeight = spacerRef.current.offsetHeight;
       
-      // Calcul basé sur la position du spacer
-      // Quand le spacer est en haut de l'écran, progress = 0
-      // Quand le spacer est complètement scrollé, progress = 1
       const scrolledInSpacer = -spacerRect.top;
       const progress = Math.max(0, Math.min(scrolledInSpacer / (spacerHeight * 0.4), 1));
       
@@ -316,8 +302,6 @@ function Hero() {
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    
-    // Appel initial pour gérer le cas où on revient en arrière
     handleScroll();
 
     return () => {
@@ -326,15 +310,10 @@ function Hero() {
   }, []);
 
   React.useEffect(() => {
-    if (!isCvMenuOpen) {
-      return;
-    }
+    if (!isCvMenuOpen) return;
 
     const handleClickAway = (event: MouseEvent) => {
-      if (
-        dockRef.current &&
-        !dockRef.current.contains(event.target as Node)
-      ) {
+      if (dockRef.current && !dockRef.current.contains(event.target as Node)) {
         setIsCvMenuOpen(false);
       }
     };
@@ -403,36 +382,28 @@ function Hero() {
     },
   ];
 
-  // Opacité des éléments UI basée sur la progression
   const uiOpacity = Math.max(0, 1 - scrollProgress * 2);
-
-  // Déterminer si on doit afficher le hero (toujours visible tant que scrollProgress > 0)
   const showHero = scrollProgress < 1;
 
   return (
     <>
-      {/* Spacer invisible pour créer l'espace de scroll nécessaire - EN PREMIER */}
       <div 
         id="hero"
         ref={spacerRef}
         style={{ 
-          height: '200vh', // 2x la hauteur de l'écran pour l'effet de zoom
+          height: '150vh',
           pointerEvents: 'none',
           position: 'relative',
         }} 
       />
 
-      {/* Hero section - fixed, toujours visible pendant le scroll dans le spacer */}
       {showHero && (
         <div
           className="fixed inset-0 flex min-h-screen w-full flex-col items-center overflow-hidden bg-white font-light"
-          style={{
-            zIndex: 50,
-          }}
+          style={{ zIndex: 50 }}
         >
           <GlassFilter />
 
-          {/* 🌈 Fond animé (lucioles colorées) */}
           <div 
             className="absolute inset-0 z-0"
             style={{
@@ -443,12 +414,10 @@ function Hero() {
             <BackgroundGradientAnimation />
           </div>
 
-          {/* 🔵 Blob avec le texte et l'effet de zoom */}
           <div className="pointer-events-none absolute inset-0 z-10">
             <AnimatedBlobs scrollProgress={scrollProgress} />
           </div>
 
-          {/* 🌟 Le contenu principal */}
           <div 
             className="relative z-20 flex min-h-screen w-full flex-col items-center"
             style={{
@@ -502,8 +471,6 @@ function Hero() {
           </div>
         </div>
       )}
-
-      {/* 🎯 Overlay de transition - SUPPRIMÉ pour enlever la lumière blanche */}
     </>
   );
 }
