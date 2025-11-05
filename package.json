@@ -11,6 +11,8 @@
     "typecheck": "tsc --noEmit -p tsconfig.app.json"
   },
   "dependencies": {
+    "@react-three/drei": "^9.122.0",
+    "@react-three/fiber": "^8.18.0",
     "@splinetool/react-spline": "^4.1.0",
     "@splinetool/runtime": "^1.10.92",
     "@supabase/supabase-js": "^2.57.4",
@@ -22,7 +24,8 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "tailwind-merge": "^3.3.1",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "three": "^0.160.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",

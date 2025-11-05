@@ -1,14 +1,16 @@
-
 import Hero from './components/Hero';
 import About from './components/About';
 import Footer from './components/Footer';
+import { TextRevealByWord } from './components/ui/text-reveal';
 
 function App() {
   return (
     <div className="min-h-screen bg-white">
-      {/* Header supprimé pour laisser place à la navbar transparente intégrée dans Hero */}
-      <main className="">
+      <main>
         <Hero />
+
+        <TextRevealByWord text="Hello, my name is Raphael, I'm 25 years old and I'm passionate about web development, AI, and entrepreneurship. Throughout this journey, you'll find my professional experiences and projects. Enjoy!" />
+
         <About />
       </main>
       <Footer />
