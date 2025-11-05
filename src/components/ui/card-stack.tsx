@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 
@@ -10,7 +10,7 @@ interface Card {
   description: string;
 }
 
-// --- Effet Glass Apple ---
+// --- Apple Glass Effect Wrapper ---
 const GlassEffect: React.FC<{ children: React.ReactNode; className?: string }> = ({
   children,
   className = "",
@@ -18,19 +18,18 @@ const GlassEffect: React.FC<{ children: React.ReactNode; className?: string }> =
   <div
     className={`relative overflow-hidden rounded-3xl ${className}`}
     style={{
-      background: "rgba(255, 255, 255, 0.25)",
-      boxShadow:
-        "0 6px 6px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1)",
+      background: "rgba(255,255,255,0.25)",
+      boxShadow: "0 6px 6px rgba(0,0,0,0.2), 0 0 20px rgba(0,0,0,0.1)",
       backdropFilter: "blur(20px)",
       WebkitBackdropFilter: "blur(20px)",
-      border: "1px solid rgba(255, 255, 255, 0.3)",
+      border: "1px solid rgba(255,255,255,0.3)",
     }}
   >
     <div
       className="absolute inset-0 rounded-3xl"
       style={{
         boxShadow:
-          "inset 2px 2px 1px 0 rgba(255, 255, 255, 0.5), inset -1px -1px 1px 1px rgba(255, 255, 255, 0.5)",
+          "inset 2px 2px 1px 0 rgba(255,255,255,0.5), inset -1px -1px 1px 1px rgba(255,255,255,0.5)",
       }}
     />
     <div className="relative z-10">{children}</div>
@@ -38,119 +37,81 @@ const GlassEffect: React.FC<{ children: React.ReactNode; className?: string }> =
 );
 
 export default function CardStack() {
-  const initialCards: Card[] = [
-    {
-      id: 1,
-      src: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1000&h=600&fit=crop",
-      alt: "Card 1",
-      title: "Alpine Peaks",
-      description: "Majestic snow-capped mountains with breathtaking views.",
-    },
-    {
-      id: 2,
-      src: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1000&h=600&fit=crop",
-      alt: "Card 2",
-      title: "Tropical Paradise",
-      description: "Crystal clear beach waters and endless summer vibes.",
-    },
-    {
-      id: 3,
-      src: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1000&h=600&fit=crop",
-      alt: "Card 3",
-      title: "Enchanted Forest",
-      description: "Lush green wilderness with a mystical atmosphere.",
-    },
-    {
-      id: 4,
-      src: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1000&h=600&fit=crop",
-      alt: "Card 4",
-      title: "Misty Valley",
-      description: "Dreamy landscape photography from the clouds.",
-    },
+  const cards: Card[] = [
+    { id: 1, src: "/WASH.png", alt: "WASH", title: "WASH", description: "Service de nettoyage moderne et innovant." },
+    { id: 2, src: "/KIN.png", alt: "KIN", title: "KIN", description: "Solutions digitales et développement web." },
+    { id: 3, src: "/FELIZBELLA.png", alt: "FELIZBELLA", title: "FELIZBELLA", description: "Beauté et bien-être au naturel." },
+    { id: 4, src: "/TRANSPORT.png", alt: "TRANSPORT", title: "TRANSPORT", description: "Logistique et transport intelligents." },
+    { id: 5, src: "/GEODIS.png", alt: "GEODIS", title: "GEODIS", description: "Partenaire logistique international." },
+    { id: 6, src: "/CTBG.png", alt: "CTBG", title: "CTBG", description: "Solutions de construction et BTP modernes." },
+    { id: 7, src: "/CAZY.png", alt: "CAZY", title: "CAZY", description: "Concepts créatifs et expériences uniques." },
+    { id: 8, src: "/KRGLOBAL.png", alt: "KRGLOBAL", title: "KRGLOBAL", description: "Expansion et stratégie internationale." },
+    { id: 9, src: "/SCHOOL.png", alt: "SCHOOL", title: "SCHOOL", description: "Plateforme éducative nouvelle génération." },
+    { id: 10, src: "/KIN.png", alt: "KIN", title: "KIN", description: "Solutions de croissance pour le digital." },
   ];
 
-  const [cards, setCards] = useState<Card[]>(initialCards);
   const [showInfo, setShowInfo] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState<1 | -1>(1);
 
-  const moveToEnd = () => setCards((prev) => [...prev.slice(1), prev[0]]);
-  const moveToStart = () =>
-    setCards((prev) => [prev[prev.length - 1], ...prev.slice(0, -1)]);
-
   const slideVariants = {
-    enter: (direction: 1 | -1) => ({
-      x: direction > 0 ? 300 : -300,
+    enter: (dir: 1 | -1) => ({
+      x: dir > 0 ? 300 : -300,
       opacity: 0,
       filter: "blur(6px)",
     }),
     center: { x: 0, opacity: 1, filter: "blur(0px)" },
-    exit: (direction: 1 | -1) => ({
-      x: direction > 0 ? -300 : 300,
+    exit: (dir: 1 | -1) => ({
+      x: dir > 0 ? -300 : 300,
       opacity: 0,
       filter: "blur(6px)",
     }),
   };
 
-  const handleNext = () => {
-    if (selectedIndex === null) return;
+  const handleNext = useCallback(() => {
     setDirection(1);
-    setSelectedIndex((prev) => (prev! + 1) % cards.length);
-  };
+    setCurrentIndex((prev) => (prev + 1) % cards.length);
+  }, [cards.length]);
 
-  const handlePrev = () => {
-    if (selectedIndex === null) return;
+  const handlePrev = useCallback(() => {
     setDirection(-1);
-    setSelectedIndex((prev) => (prev! - 1 + cards.length) % cards.length);
-  };
+    setCurrentIndex((prev) => (prev - 1 + cards.length) % cards.length);
+  }, [cards.length]);
 
   return (
-    <div className="w-full h-screen flex items-center justify-center bg-gradient-to-b from-white to-gray-50 relative overflow-hidden">
-      {/* Flèches du stack */}
-      <button
-        onClick={moveToStart}
-        className="absolute left-8 top-1/2 -translate-y-1/2 p-4 rounded-full bg-white/80 backdrop-blur-md shadow-lg border border-gray-300 z-20 hover:scale-105 transition-transform"
-      >
-        <ChevronLeft className="w-6 h-6 text-gray-800" />
-      </button>
-      <button
-        onClick={moveToEnd}
-        className="absolute right-8 top-1/2 -translate-y-1/2 p-4 rounded-full bg-white/80 backdrop-blur-md shadow-lg border border-gray-300 z-20 hover:scale-105 transition-transform"
-      >
-        <ChevronRight className="w-6 h-6 text-gray-800" />
-      </button>
-
-      {/* Stack */}
-      <div className="relative w-[600px] h-[400px] z-10">
+    <div className="w-full h-screen flex flex-col items-center justify-center bg-gradient-to-b from-white to-gray-50 relative overflow-hidden">
+      {/* --- Stack principal --- */}
+      <div className="relative w-[600px] h-[400px] z-10 flex items-center justify-center">
         <ul className="relative w-full h-full m-0 p-0">
           {cards.map(({ id, src, alt, title, description }, i) => {
-            const isFront = i === 0;
-            const offset = i * -20;
-            const scale = 1 - i * 0.05;
-            const brightness = 1 - i * 0.1;
-            const zIndex = cards.length - i;
+            const indexOffset = (i - currentIndex + cards.length) % cards.length;
+            const offset = indexOffset * -20;
+            const scale = 1 - indexOffset * 0.05;
+            const brightness = 1 - indexOffset * 0.1;
+            const zIndex = cards.length - indexOffset;
 
             return (
               <li
                 key={id}
-                className="absolute w-full h-full list-none overflow-hidden rounded-2xl border border-gray-300 shadow-2xl bg-white cursor-pointer"
+                className="absolute w-full h-full list-none overflow-hidden rounded-2xl border border-gray-300 shadow-2xl bg-white cursor-pointer transition-transform duration-500 ease-out"
                 style={{
                   top: offset,
                   zIndex,
                   transform: `scale(${scale})`,
                   filter: `brightness(${brightness})`,
                 }}
-                onMouseEnter={() => isFront && setShowInfo(true)}
+                onMouseEnter={() => indexOffset === 0 && setShowInfo(true)}
                 onMouseLeave={() => setShowInfo(false)}
-                onClick={() => isFront && setSelectedIndex(i)}
+                onClick={() => indexOffset === 0 && setSelectedIndex(i)}
               >
                 <img
                   src={src}
                   alt={alt}
-                  className="w-full h-full object-cover pointer-events-none select-none"
+                  className="w-full h-full object-contain p-8 pointer-events-none select-none bg-white"
                   draggable={false}
                 />
-                {isFront && (
+                {indexOffset === 0 && (
                   <motion.div
                     className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent text-white"
                     initial={{ opacity: 0 }}
@@ -165,9 +126,36 @@ export default function CardStack() {
             );
           })}
         </ul>
+
+        {/* --- Flèches principales --- */}
+        <button
+          onClick={handlePrev}
+          className="absolute left-[-80px] top-1/2 -translate-y-1/2 p-4 rounded-full bg-white/40 hover:bg-white/60 backdrop-blur-md shadow-xl border border-white/30 transition z-50"
+        >
+          <ChevronLeft className="w-7 h-7 text-gray-800" />
+        </button>
+
+        <button
+          onClick={handleNext}
+          className="absolute right-[-80px] top-1/2 -translate-y-1/2 p-4 rounded-full bg-white/40 hover:bg-white/60 backdrop-blur-md shadow-xl border border-white/30 transition z-50"
+        >
+          <ChevronRight className="w-7 h-7 text-gray-800" />
+        </button>
       </div>
 
-      {/* Carte agrandie */}
+      {/* --- Barre de progression --- */}
+      <div className="absolute bottom-16 w-[300px] h-2 rounded-full bg-gray-200 overflow-hidden">
+        <motion.div
+          className="h-full rounded-full"
+          style={{
+            background: "linear-gradient(90deg, #5c6ff4, #e870c2)",
+            width: `${((currentIndex + 1) / cards.length) * 100}%`,
+          }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+        />
+      </div>
+
+      {/* --- Carte zoomée --- */}
       <AnimatePresence custom={direction}>
         {selectedIndex !== null && (
           <motion.div
@@ -190,24 +178,20 @@ export default function CardStack() {
               onClick={(e) => e.stopPropagation()}
             >
               <GlassEffect className="w-[900px] h-[550px] flex relative overflow-hidden">
-                {/* Image */}
-                <div className="w-1/2 h-full">
+                <div className="w-1/2 h-full flex items-center justify-center bg-white">
                   <img
                     src={cards[selectedIndex].src}
                     alt={cards[selectedIndex].alt}
-                    className="w-full h-full object-cover rounded-l-3xl"
+                    className="w-[80%] h-auto object-contain rounded-l-3xl"
                   />
                 </div>
 
-                {/* Texte */}
                 <div className="w-1/2 p-10 flex flex-col justify-center text-gray-800 relative">
                   <h2 className="text-4xl font-semibold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-slate-800 to-slate-500">
                     {cards[selectedIndex].title}
                   </h2>
                   <p className="text-lg leading-relaxed text-gray-700">
-                    {cards[selectedIndex].description} — Smooth Apple-like slide
-                    transition between cards. The previous card slides out
-                    gracefully while the next glides in.
+                    {cards[selectedIndex].description}
                   </p>
 
                   <button
@@ -219,15 +203,23 @@ export default function CardStack() {
                 </div>
               </GlassEffect>
 
-              {/* Flèches visibles sur les bords */}
+              {/* --- Flèches internes --- */}
               <button
-                onClick={handlePrev}
+                onClick={() =>
+                  setSelectedIndex((prev) =>
+                    prev! > 0 ? prev! - 1 : prev
+                  )
+                }
                 className="absolute left-[-80px] top-1/2 -translate-y-1/2 p-4 rounded-full bg-white/40 hover:bg-white/60 backdrop-blur-md shadow-xl border border-white/30 transition z-50"
               >
                 <ChevronLeft className="w-7 h-7 text-gray-800" />
               </button>
               <button
-                onClick={handleNext}
+                onClick={() =>
+                  setSelectedIndex((prev) =>
+                    prev! < cards.length - 1 ? prev! + 1 : prev
+                  )
+                }
                 className="absolute right-[-80px] top-1/2 -translate-y-1/2 p-4 rounded-full bg-white/40 hover:bg-white/60 backdrop-blur-md shadow-xl border border-white/30 transition z-50"
               >
                 <ChevronRight className="w-7 h-7 text-gray-800" />
