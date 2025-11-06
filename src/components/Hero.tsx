@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import cvLogo from '../assets/logos/cv.svg';
 import fiverrLogo from '../assets/logos/fiverr.svg';
 import githubLogo from '../assets/logos/github.svg';
+import planetLogo from '../assets/logos/planet.svg';
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
 import { AppleHelloEnglishEffect } from "@/components/ui/apple-hello-effect";
 
@@ -139,6 +140,7 @@ interface GlassEffectProps {
   href?: string;
   target?: string;
   overlayColor?: string;
+  allowOverflow?: boolean;
 }
 
 interface DockIcon {
@@ -146,6 +148,8 @@ interface DockIcon {
   alt: string;
   href?: string;
   onClick?: () => void;
+  menuContent?: React.ReactNode;
+  menuOpen?: boolean;
 }
 
 const GlassEffect: React.FC<GlassEffectProps> = ({
@@ -155,6 +159,7 @@ const GlassEffect: React.FC<GlassEffectProps> = ({
   href,
   target = '_blank',
   overlayColor = 'rgba(255, 255, 255, 0.25)',
+  allowOverflow = false,
 }) => {
   const glassStyle = {
     boxShadow: '0 6px 6px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1)',
@@ -164,7 +169,7 @@ const GlassEffect: React.FC<GlassEffectProps> = ({
 
   const content = (
     <div
-      className={`relative flex font-semibold overflow-hidden text-black cursor-pointer transition-all duration-700 ${className}`}
+      className={`relative flex font-semibold ${allowOverflow ? 'overflow-visible' : 'overflow-hidden'} text-black cursor-pointer transition-all duration-700 ${className}`}
       style={glassStyle}
     >
       <div
@@ -200,7 +205,7 @@ const GlassEffect: React.FC<GlassEffectProps> = ({
 };
 
 const GlassDock: React.FC<{ icons: DockIcon[] }> = ({ icons }) => (
-  <GlassEffect className="rounded-3xl p-2 hover:p-3 hover:rounded-4xl">
+  <GlassEffect className="rounded-3xl p-2 hover:p-3 hover:rounded-4xl" allowOverflow>
     <div className="flex items-center justify-center gap-2.5 p-2">
       {icons.map((icon, index) => {
         const IconWrapper = icon.href ? 'a' : 'button';
@@ -217,23 +222,29 @@ const GlassDock: React.FC<{ icons: DockIcon[] }> = ({ icons }) => (
             };
 
         return (
-          <IconWrapper
-            key={index}
-            {...props}
-            className="group flex items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-500 transition-all duration-500"
-          >
-            <div className="w-[3.5rem] h-[3.5rem] flex items-center justify-center rounded-2xl bg-white/10 backdrop-blur-md shadow-md ring-1 ring-white/30 overflow-hidden transition-all duration-500 group-hover:scale-110 group-hover:-translate-y-1 group-hover:bg-white/30">
-              <img
-                src={icon.src}
-                alt={icon.alt}
-                className="w-full h-full object-cover select-none pointer-events-none transition-transform duration-500 group-hover:scale-105"
-                style={{
-                  borderRadius: '0.75rem',
-                  transitionTimingFunction: 'cubic-bezier(0.175, 0.885, 0.32, 2.2)',
-                }}
-              />
-            </div>
-          </IconWrapper>
+          <div key={index} className="relative flex flex-col items-center">
+            <IconWrapper
+              {...props}
+              className="group flex items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-500 transition-all duration-500"
+            >
+              <div className="w-[3.5rem] h-[3.5rem] flex items-center justify-center rounded-2xl bg-white/10 backdrop-blur-md shadow-md ring-1 ring-white/30 overflow-hidden transition-all duration-500 group-hover:scale-110 group-hover:-translate-y-1 group-hover:bg-white/30">
+                <img
+                  src={icon.src}
+                  alt={icon.alt}
+                  className="w-full h-full object-cover select-none pointer-events-none transition-transform duration-500 group-hover:scale-105"
+                  style={{
+                    borderRadius: '0.75rem',
+                    transitionTimingFunction: 'cubic-bezier(0.175, 0.885, 0.32, 2.2)',
+                  }}
+                />
+              </div>
+            </IconWrapper>
+            {icon.menuContent && icon.menuOpen && (
+              <div className="absolute bottom-full left-1/2 z-50 mb-4 w-56 -translate-x-1/2">
+                {icon.menuContent}
+              </div>
+            )}
+          </div>
         );
       })}
     </div>
@@ -293,19 +304,28 @@ const GlassFilter: React.FC = () => (
   </svg>
 );
 
+type MenuOption = { label: string; href: string };
+
 function Hero() {
-  const [isCvMenuOpen, setIsCvMenuOpen] = React.useState(false);
+  const [openMenu, setOpenMenu] = React.useState<'cv' | 'sites' | null>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const dockRef = React.useRef<HTMLDivElement | null>(null);
   const spacerRef = React.useRef<HTMLDivElement | null>(null);
-  const closeCvMenu = React.useCallback(() => setIsCvMenuOpen(false), []);
+  const closeMenus = React.useCallback(() => setOpenMenu(null), []);
 
-  const cvOptions = React.useMemo(
+  const cvOptions = React.useMemo<MenuOption[]>(
     () => [
-      { label: 'CV Français', href: '/CV-RAPHAEL-FR.pdf' },
-      { label: 'CV Anglais', href: '/CV-RAPHAEL-EN.pdf' },
-      { label: 'CV Arabe', href: '/CV-RAPHAEL-AR.pdf' },
-      { label: 'CV Complet (EN)', href: '/CV-COMPLET-EN.pdf' },
+      { label: 'French Resume', href: '/CV-RAPHAEL-FR.pdf' },
+      { label: 'English Resume', href: '/CV-RAPHAEL-EN.pdf' },
+      { label: 'Arabic Resume', href: '/CV-RAPHAEL-AR.pdf' },
+      { label: 'Full Resume (EN)', href: '/CV-COMPLET-EN.pdf' },
+    ],
+    []
+  );
+  const siteOptions = React.useMemo<MenuOption[]>(
+    () => [
+      { label: 'My first website', href: 'https://rlxra-livid.vercel.app/' },
+      { label: 'My 2nd website', href: 'https://error404-git-master-raphs-projects-3a83f526.vercel.app/' },
     ],
     []
   );
@@ -332,17 +352,17 @@ function Hero() {
   }, []);
 
   React.useEffect(() => {
-    if (!isCvMenuOpen) return;
+    if (!openMenu) return;
 
     const handleClickAway = (event: MouseEvent) => {
       if (dockRef.current && !dockRef.current.contains(event.target as Node)) {
-        setIsCvMenuOpen(false);
+        setOpenMenu(null);
       }
     };
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        setIsCvMenuOpen(false);
+        setOpenMenu(null);
       }
     };
 
@@ -353,15 +373,24 @@ function Hero() {
       document.removeEventListener('mousedown', handleClickAway);
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isCvMenuOpen]);
+  }, [openMenu]);
 
   const handleCvSelect = (href: string) => {
     window.open(href, '_blank', 'noopener,noreferrer');
-    setIsCvMenuOpen(false);
+    setOpenMenu(null);
   };
 
   const handleCvIconClick = () => {
-    setIsCvMenuOpen((prev) => !prev);
+    setOpenMenu((prev) => (prev === 'cv' ? null : 'cv'));
+  };
+
+  const handleSiteSelect = (href: string) => {
+    window.open(href, '_blank', 'noopener,noreferrer');
+    setOpenMenu(null);
+  };
+
+  const handleSitesIconClick = () => {
+    setOpenMenu((prev) => (prev === 'sites' ? null : 'sites'));
   };
 
   const sections = [
@@ -379,29 +408,56 @@ function Hero() {
     }
   };
 
+  const renderMenuContent = (options: MenuOption[], onSelect: (href: string) => void) => (
+    <GlassEffect className="rounded-2xl px-4 py-3">
+      <ul className="flex flex-col gap-2 text-sm text-slate-800">
+        {options.map((option) => (
+          <li key={option.href}>
+            <button
+              type="button"
+              onClick={() => onSelect(option.href)}
+              className="w-full rounded-xl bg-white/60 px-3 py-2 text-left transition-colors duration-200 hover:bg-white/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-500"
+            >
+              {option.label}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </GlassEffect>
+  );
+
   const dockIcons: DockIcon[] = [
     {
       src: 'https://cdn-icons-png.flaticon.com/512/174/174857.png',
       alt: 'LinkedIn',
       href: 'https://www.linkedin.com/in/raphael-theuillon-689139261/',
-      onClick: closeCvMenu,
+      onClick: closeMenus,
     },
     {
       src: fiverrLogo,
       alt: 'Fiverr',
       href: 'https://www.fiverr.com/users/raph910/seller_dashboard',
-      onClick: closeCvMenu,
+      onClick: closeMenus,
     },
     {
       src: githubLogo,
       alt: 'GitHub',
       href: 'https://github.com/Raphael91000',
-      onClick: closeCvMenu,
+      onClick: closeMenus,
+    },
+    {
+      src: planetLogo,
+      alt: 'Websites',
+      onClick: handleSitesIconClick,
+      menuContent: renderMenuContent(siteOptions, handleSiteSelect),
+      menuOpen: openMenu === 'sites',
     },
     {
       src: cvLogo,
       alt: 'CV',
       onClick: handleCvIconClick,
+      menuContent: renderMenuContent(cvOptions, handleCvSelect),
+      menuOpen: openMenu === 'cv',
     },
   ];
 
@@ -472,25 +528,6 @@ function Hero() {
             <div className="mt-auto flex w-full justify-center pb-8 translate-y-2">
               <div className="relative" ref={dockRef}>
                 <GlassDock icons={dockIcons} />
-                {isCvMenuOpen && (
-                  <div className="absolute bottom-full left-1/2 z-50 mb-4 w-56 -translate-x-1/2">
-                    <GlassEffect className="rounded-2xl px-4 py-3">
-                      <ul className="flex flex-col gap-2 text-sm text-slate-800">
-                        {cvOptions.map((option) => (
-                          <li key={option.href}>
-                            <button
-                              type="button"
-                              onClick={() => handleCvSelect(option.href)}
-                              className="w-full rounded-xl bg-white/60 px-3 py-2 text-left transition-colors duration-200 hover:bg-white/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-500"
-                            >
-                              {option.label}
-                            </button>
-                          </li>
-                        ))}
-                      </ul>
-                    </GlassEffect>
-                  </div>
-                )}
               </div>
             </div>
           </div>
