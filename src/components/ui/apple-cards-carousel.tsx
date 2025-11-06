@@ -17,13 +17,15 @@ import { useOutsideClick } from "../../hooks/use-outside-click";
 interface CarouselProps {
   items: JSX.Element[];
   initialScroll?: number;
+  onEndReachChange?: (atEnd: boolean) => void;
 }
 
 type Card = {
-  src: string;
+  src?: string;
   title: string;
   category: string;
   content: React.ReactNode;
+  backgroundClass?: string;
 };
 
 export const CarouselContext = createContext<{
@@ -34,11 +36,16 @@ export const CarouselContext = createContext<{
   currentIndex: 0,
 });
 
-export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
+export const Carousel = ({
+  items,
+  initialScroll = 0,
+  onEndReachChange,
+}: CarouselProps) => {
   const carouselRef = React.useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = React.useState(false);
   const [canScrollRight, setCanScrollRight] = React.useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const endReachedRef = useRef(false);
 
   useEffect(() => {
     if (carouselRef.current) {
@@ -52,6 +59,18 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
       const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
       setCanScrollLeft(scrollLeft > 0);
       setCanScrollRight(scrollLeft < scrollWidth - clientWidth);
+
+      const maxScrollLeft = Math.max(scrollWidth - clientWidth, 0);
+      const threshold = 48;
+      const atEnd =
+        scrollWidth <= clientWidth
+          ? true
+          : scrollLeft >= maxScrollLeft - threshold;
+
+      if (onEndReachChange && atEnd !== endReachedRef.current) {
+        endReachedRef.current = atEnd;
+        onEndReachChange(atEnd);
+      }
     }
   };
 
@@ -81,7 +100,7 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
   };
 
   const isMobile = () => {
-    return window && window.innerWidth < 768;
+    return typeof window !== "undefined" && window.innerWidth < 768;
   };
 
   return (
@@ -90,9 +109,9 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
     >
       <div className="relative w-full">
         <div
-          className="flex w-full overflow-x-scroll overscroll-x-auto scroll-smooth py-10 [scrollbar-width:none] md:py-20"
           ref={carouselRef}
           onScroll={checkScrollability}
+          className="flex w-full overflow-x-scroll overscroll-x-auto scroll-smooth py-10 [scrollbar-width:none] md:py-20"
         >
           <div
             className={cn(
@@ -162,6 +181,7 @@ export const Card = ({
 }) => {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const closeTimeoutRef = useRef<number | null>(null);
   const { onCardClose } = useContext(CarouselContext);
 
   useEffect(() => {
@@ -187,9 +207,25 @@ export const Card = ({
     setOpen(true);
   };
 
+  useEffect(() => {
+    return () => {
+      if (closeTimeoutRef.current) {
+        window.clearTimeout(closeTimeoutRef.current);
+      }
+    };
+  }, []);
+
   const handleClose = () => {
+    if (closeTimeoutRef.current) {
+      window.clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
+
     setOpen(false);
-    onCardClose(index);
+    closeTimeoutRef.current = window.setTimeout(() => {
+      onCardClose(index);
+      closeTimeoutRef.current = null;
+    }, 300);
   };
 
   return (
@@ -239,7 +275,7 @@ export const Card = ({
           <feDisplacementMap
             in="SourceGraphic"
             in2="softMap"
-            scale="200"
+            scale="35"
             xChannelSelector="R"
             yChannelSelector="G"
           />
@@ -252,7 +288,7 @@ export const Card = ({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 h-full w-full bg-black/80 backdrop-blur-lg"
+              className="fixed inset-0 h-full w-full pointer-events-none"
             />
             <motion.div
               initial={{ opacity: 0 }}
@@ -274,10 +310,20 @@ export const Card = ({
                   isolation: "isolate",
                 }}
               />
+              {!card.src && (
+                <div
+                  className={cn(
+                    "absolute inset-0 z-[5] rounded-3xl",
+                    card.backgroundClass ??
+                      "bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900",
+                  )}
+                />
+              )}
               <div
                 className="absolute inset-0 z-10 rounded-3xl"
                 style={{ background: "rgba(255, 255, 255, 0.25)" }}
               />
+              <div className="absolute inset-0 z-[15] rounded-3xl bg-black/60 backdrop-blur-sm" />
               <div
                 className="absolute inset-0 z-20 rounded-3xl overflow-hidden"
                 style={{
@@ -315,12 +361,15 @@ export const Card = ({
       <motion.button
         layoutId={layout ? `card-${card.title}` : undefined}
         onClick={handleOpen}
-        className="relative z-10 flex h-64 w-48 flex-col items-start justify-start overflow-hidden rounded-3xl bg-gray-100 md:h-[32rem] md:w-80 dark:bg-neutral-900"
+        className={cn(
+          "relative z-10 flex h-64 w-48 flex-col items-start justify-start overflow-hidden rounded-3xl md:h-[32rem] md:w-80",
+          card.src ? "bg-gray-100 dark:bg-neutral-900" : "bg-transparent",
+        )}
       >
         <div className="pointer-events-none absolute inset-x-0 top-0 z-30 h-full bg-gradient-to-b from-black/50 via-transparent to-transparent" />
         <div className="relative z-40 p-8">
           <motion.p
-            layoutId={layout ? `category-${card.category}` : undefined}
+            layoutId={layout ? `category-${card.title}` : undefined}
             className="text-left font-sans text-sm font-medium text-white drop-shadow-lg md:text-base"
           >
             {card.category}
@@ -332,12 +381,22 @@ export const Card = ({
             {card.title}
           </motion.p>
         </div>
-        <BlurImage
-          src={card.src}
-          alt={card.title}
-          fill={true}
-          className="absolute inset-0 z-10 object-cover"
-        />
+        {card.src ? (
+          <BlurImage
+            src={card.src}
+            alt={card.title}
+            fill={true}
+            className="absolute inset-0 z-10 object-cover"
+          />
+        ) : (
+          <div
+            className={cn(
+              "absolute inset-0 z-10",
+              card.backgroundClass ??
+                "bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900",
+            )}
+          />
+        )}
       </motion.button>
     </>
   );
@@ -373,4 +432,3 @@ export const BlurImage = ({
     />
   );
 };
-

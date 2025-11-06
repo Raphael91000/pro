@@ -390,6 +390,7 @@ function Hero() {
       <div 
         id="hero"
         ref={spacerRef}
+        className="relative bg-white"
         style={{ 
           height: '150vh',
           pointerEvents: 'none',
@@ -412,6 +413,7 @@ function Hero() {
             }}
           >
             <BackgroundGradientAnimation />
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[45vh] bg-[linear-gradient(to_bottom,rgba(255,255,255,0)_0%,rgba(255,255,255,0.45)_55%,rgba(255,255,255,1)_100%)]" />
           </div>
 
           <div className="pointer-events-none absolute inset-0 z-10">

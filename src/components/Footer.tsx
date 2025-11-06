@@ -4,23 +4,24 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-gray-900 text-white py-12">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="grid md:grid-cols-3 gap-8 mb-8">
+    <footer className="relative py-12 text-slate-700">
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-white/40 via-white/10 to-transparent" />
+      <div className="relative mx-auto max-w-7xl space-y-10 px-6">
+        <div className="grid gap-8 md:grid-cols-3">
           <div>
-            <h3 className="text-2xl font-bold mb-4">Portfolio</h3>
-            <p className="text-gray-400 leading-relaxed">
-              Designer & Développeur(se) passionné(e) par la création d'expériences numériques exceptionnelles.
+            <h3 className="mb-4 text-2xl font-bold text-slate-900">Portfolio</h3>
+            <p className="leading-relaxed text-slate-600">
+              Designer & développeur passionné par la création d&apos;expériences numériques élégantes et utiles.
             </p>
           </div>
 
           <div>
-            <h4 className="text-lg font-semibold mb-4">Navigation</h4>
+            <h4 className="mb-4 text-lg font-semibold text-slate-900">Navigation</h4>
             <ul className="space-y-2">
               <li>
                 <button
                   onClick={() => document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-slate-600 transition-colors hover:text-slate-900"
                 >
                   Accueil
                 </button>
@@ -28,23 +29,23 @@ export default function Footer() {
               <li>
                 <button
                   onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-slate-600 transition-colors hover:text-slate-900"
                 >
                   À propos
                 </button>
               </li>
               <li>
                 <button
-                  onClick={() => document.getElementById('portfolio')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="text-gray-400 hover:text-white transition-colors"
+                  onClick={() => document.getElementById('journey')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="text-slate-600 transition-colors hover:text-slate-900"
                 >
-                  Réalisations
+                  My Journey
                 </button>
               </li>
               <li>
                 <button
                   onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-slate-600 transition-colors hover:text-slate-900"
                 >
                   Contact
                 </button>
@@ -53,52 +54,50 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-lg font-semibold mb-4">Suivez-moi</h4>
-            <div className="flex gap-4">
+            <h4 className="mb-4 text-lg font-semibold text-slate-900">Retrouvez-moi</h4>
+            <div className="flex gap-3">
               <a
-                href="https://github.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-3 bg-gray-800 rounded-full hover:bg-blue-600 transition-colors"
-                aria-label="GitHub"
-              >
-                <Github size={20} />
-              </a>
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-3 bg-gray-800 rounded-full hover:bg-blue-600 transition-colors"
+                href="https://www.linkedin.com/in/raphael-theuillon-689139261/"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/60 text-slate-700 transition-colors hover:bg-white"
                 aria-label="LinkedIn"
-              >
-                <Linkedin size={20} />
-              </a>
-              <a
-                href="https://twitter.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3 bg-gray-800 rounded-full hover:bg-blue-600 transition-colors"
-                aria-label="Twitter"
               >
-                <Twitter size={20} />
+                <Linkedin size={18} />
               </a>
               <a
-                href="mailto:contact@example.com"
-                className="p-3 bg-gray-800 rounded-full hover:bg-blue-600 transition-colors"
+                href="https://github.com/Raphael91000"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/60 text-slate-700 transition-colors hover:bg-white"
+                aria-label="GitHub"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Github size={18} />
+              </a>
+              <a
+                href="https://x.com/Raph_theuillon"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/70 text-slate-700 transition-colors hover:bg-white"
+                aria-label="Twitter / X"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Twitter size={18} />
+              </a>
+              <a
+                href="mailto:hello@email.com"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/70 text-slate-700 transition-colors hover:bg-white"
                 aria-label="Email"
               >
-                <Mail size={20} />
+                <Mail size={18} />
               </a>
             </div>
           </div>
         </div>
 
-        <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-gray-400 text-sm">
-            © {currentYear} Portfolio. Tous droits réservés.
-          </p>
-          <p className="text-gray-400 text-sm flex items-center gap-2">
-            Créé avec <Heart size={16} className="text-red-500" /> et React
+        <div className="flex flex-col items-center justify-between gap-4 border-t border-white/70 pt-6 text-sm text-slate-500 md:flex-row">
+          <p>© {currentYear} Raphael Theuillon. Tous droits réservés.</p>
+          <p className="flex items-center gap-2">
+            Fait avec <Heart size={16} className="text-rose-500" /> à Paris.
           </p>
         </div>
       </div>

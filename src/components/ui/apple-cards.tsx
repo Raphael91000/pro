@@ -1,6 +1,10 @@
 import React from "react";
 import { Carousel, Card } from "./apple-cards-carousel";
 
+interface AppleCardsProps {
+  onEndReachedChange?: (atEnd: boolean) => void;
+}
+
 interface CardData {
   id: number;
   src: string;
@@ -10,7 +14,9 @@ interface CardData {
   section?: "education" | "entrepreneurship" | "experience";
 }
 
-export default function AppleCards() {
+export default function AppleCards({
+  onEndReachedChange,
+}: AppleCardsProps = {}) {
   const cards: CardData[] = [
     // --- Entrepreneurship ---
     {
@@ -139,6 +145,10 @@ export default function AppleCards() {
     );
   });
 
-  return <Carousel items={carouselItems} />;
+  return (
+    <Carousel
+      items={carouselItems}
+      onEndReachChange={onEndReachedChange}
+    />
+  );
 }
-
