@@ -61,28 +61,25 @@ export default function Journey() {
   const appleCardsScale = useTransform(fastRevealProgress, [0, 1], [1, 0.94]);
 
   return (
-    <div ref={containerRef} className="relative min-h-[220vh]">
+    <div
+      ref={containerRef}
+      className="relative -mt-12 sm:-mt-14 lg:-mt-16 min-h-[130vh] sm:min-h-[145vh] lg:min-h-[165vh]"
+    >
       <section
         id="journey"
         className="sticky top-0 flex h-screen items-center overflow-hidden"
       >
         <div className="relative mx-auto flex h-full w-full max-w-7xl flex-col justify-center px-4 sm:px-6 lg:px-8">
           <motion.div
-            className="relative z-20 mb-16 text-left sm:pl-4 lg:pl-6"
+            className="relative z-20 mt-10 mb-16 text-left sm:pl-4 lg:pl-6"
             style={{ x: titleX }}
           >
-            <motion.h2 className="text-5xl font-bold">
-              <span className="text-slate-700">My </span>
-              <span className="bg-gradient-to-r from-[#5c6ff4] to-[#e870c2] bg-clip-text text-transparent">
-                Journey
+            <motion.h2 className="text-4xl font-bold leading-tight text-slate-700 sm:text-5xl lg:text-[3.4rem]">
+              <span>Switch and click for discover </span>
+              <span className="bg-gradient-to-r from-[#5c6ff4] via-[#7b6ff4] to-[#e870c2] bg-clip-text text-transparent">
+                my journey
               </span>
             </motion.h2>
-            <motion.p className="mt-4 max-w-3xl text-3xl font-semibold leading-snug text-slate-600 sm:text-[2.4rem] lg:text-[2.85rem]">
-              Switch and click for{" "}
-              <span className="bg-gradient-to-r from-[#5c6ff4] via-[#7b6ff4] to-[#e870c2] bg-clip-text text-transparent">
-                My Journey
-              </span>
-            </motion.p>
           </motion.div>
 
           <motion.div

@@ -33,11 +33,13 @@ const TextRevealByWord: FC<TextRevealByWordProps> = ({
   const baseSegment = 1 / totalWords;
   const overlap = baseSegment * 1.05;
 
+  const containerHeight = Math.max(120, totalWords * 3.6);
+
   return (
     <div
       ref={targetRef}
       className={cn("relative z-0", className)}
-      style={{ height: `${Math.max(260, totalWords * 12)}vh` }}
+      style={{ height: `${containerHeight}vh` }}
     >
       <div className="sticky top-[15vh] mx-auto flex h-[60vh] w-full max-w-5xl items-center justify-center px-5 py-10 sm:w-[70vw] sm:px-6 md:px-8 md:py-12">
         <div className="group relative w-full rounded-[32px] p-[2px]">

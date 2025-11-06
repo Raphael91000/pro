@@ -22,12 +22,10 @@ function App() {
       <main className="relative z-10 pt-24 md:pt-0">
         <Hero />
 
-        <section className="relative -mt-24 overflow-visible pt-24 md:-mt-32 md:pt-36">
-          <div className="space-y-16 md:space-y-18 lg:space-y-20">
-            <div className="space-y-0">
-              <About />
-              <Journey />
-            </div>
+        <section className="relative -mt-24 overflow-visible pt-24 md:-mt-32 md:pt-0">
+          <div className="flex flex-col">
+            <About />
+            <Journey />
             <Contact />
             <Footer />
           </div>

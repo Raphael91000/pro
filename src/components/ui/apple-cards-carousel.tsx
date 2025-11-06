@@ -23,7 +23,7 @@ interface CarouselProps {
 type Card = {
   src?: string;
   title: string;
-  category: string;
+  category?: string;
   content: React.ReactNode;
   backgroundClass?: string;
 };
@@ -340,12 +340,14 @@ export const Card = ({
                 >
                   <IconX className="h-6 w-6 text-white" />
                 </button>
-                <motion.p
-                  layoutId={layout ? `category-${card.title}` : undefined}
-                  className="text-base font-medium text-white"
-                >
-                  {card.category}
-                </motion.p>
+                {card.category && (
+                  <motion.p
+                    layoutId={layout ? `category-${card.title}` : undefined}
+                    className="text-base font-medium text-white"
+                  >
+                    {card.category}
+                  </motion.p>
+                )}
                 <motion.p
                   layoutId={layout ? `title-${card.title}` : undefined}
                   className="mt-4 text-2xl font-semibold text-white md:text-5xl"
@@ -368,12 +370,14 @@ export const Card = ({
       >
         <div className="pointer-events-none absolute inset-x-0 top-0 z-30 h-full bg-gradient-to-b from-black/50 via-transparent to-transparent" />
         <div className="relative z-40 p-8">
-          <motion.p
-            layoutId={layout ? `category-${card.title}` : undefined}
-            className="text-left font-sans text-sm font-medium text-white drop-shadow-lg md:text-base"
-          >
-            {card.category}
-          </motion.p>
+          {card.category && (
+            <motion.p
+              layoutId={layout ? `category-${card.title}` : undefined}
+              className="text-left font-sans text-sm font-medium text-white drop-shadow-lg md:text-base"
+            >
+              {card.category}
+            </motion.p>
+          )}
           <motion.p
             layoutId={layout ? `title-${card.title}` : undefined}
             className="mt-2 max-w-xs text-left font-sans text-xl font-semibold [text-wrap:balance] text-white drop-shadow-lg md:text-3xl"

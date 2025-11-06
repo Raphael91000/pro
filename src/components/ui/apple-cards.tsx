@@ -120,19 +120,12 @@ export default function AppleCards({
 
   // Mapper les cartes pour le carousel
   const carouselItems = cardsWithImages.map((card, index) => {
-    const category = card.section === "entrepreneurship" 
-      ? "🚀 Entrepreneurship" 
-      : card.section === "experience" 
-      ? "💼 Professional Experience" 
-      : "🎓 Education";
-
     return (
       <Card
         key={card.id}
         card={{
           src: card.src,
           title: card.title,
-          category: category,
           content: (
             <div className="whitespace-pre-line text-white">
               {card.zoomBody}
