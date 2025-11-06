@@ -33,7 +33,7 @@ const TextRevealByWord: FC<TextRevealByWordProps> = ({
   const baseSegment = 1 / totalWords;
   const overlap = baseSegment * 1.05;
 
-  const containerHeight = Math.max(120, totalWords * 3.6);
+  const containerHeight = Math.max(120, totalWords * 3.4);
 
   return (
     <div
