@@ -70,9 +70,15 @@ const AnimatedBlobs: React.FC<{ scrollProgress: number }> = ({ scrollProgress })
           transition: 'opacity 0.05s ease-out',
         }}
       >
-        <span className="block text-slate-900/90">Welcome to my</span>
+        <span className="block text-slate-900/90">
+          Scroll for{" "}
+          <span className="bg-gradient-to-r from-[#5c6ff4] to-[#e870c2] bg-clip-text text-transparent font-bold">
+            enter
+          </span>
+        </span>
+        <span className="block text-slate-900/90">in my</span>
         <span className="block bg-gradient-to-r from-[#5c6ff4] to-[#e870c2] bg-clip-text text-transparent font-bold">
-          Portfolio
+          Portfolio.
         </span>
       </span>
 
