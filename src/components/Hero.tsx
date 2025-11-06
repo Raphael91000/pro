@@ -365,9 +365,10 @@ function Hero() {
   };
 
   const sections = [
-    { id: 'hero', label: 'Accueil' },
-    { id: 'about', label: 'À propos' },
-    { id: 'portfolio', label: 'Réalisations' },
+    { id: 'hero', label: 'Home' },
+    { id: 'about', label: 'About' },
+    { id: 'skills', label: 'Skills' },
+    { id: 'journey', label: 'Journey' },
     { id: 'contact', label: 'Contact' },
   ];
 

@@ -28,9 +28,10 @@ export default function Header() {
   };
 
   const menuItems = [
-    { id: 'hero', label: 'Accueil' },
-    { id: 'about', label: 'À propos' },
-    { id: 'journey', label: 'Parcours' },
+    { id: 'hero', label: 'Home' },
+    { id: 'about', label: 'About' },
+    { id: 'journey', label: 'Journey' },
+    { id: 'skills', label: 'Skills' },
     { id: 'contact', label: 'Contact' },
   ];
 
@@ -63,7 +64,7 @@ export default function Header() {
             <button
               className="rounded-full border border-white/70 bg-white/60 p-2 text-slate-700 shadow-sm transition-all duration-200 hover:scale-105 hover:border-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#5c6ff4]/60"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              aria-label={isMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+              aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={isMenuOpen}
               aria-controls="mobile-navigation"
             >

@@ -41,7 +41,7 @@ export default function Skills() {
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-56 bg-[linear-gradient(to_bottom,rgba(255,255,255,0)_0%,rgba(92,111,244,0.08)_15%,rgba(232,112,194,0.12)_55%,rgba(255,255,255,1)_100%)]" />
 
       <div className="relative z-10 mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div className="relative mt-20 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="relative mt-20">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -54,50 +54,55 @@ export default function Skills() {
               skills.
             </span>
           </motion.p>
-          {skillCards.map((card, cardIndex) => (
-            <motion.div
-              key={card.title}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.4 }}
-              transition={{ duration: 0.55, ease: "easeOut", delay: cardIndex * 0.12 }}
-              className="relative"
-            >
-              <div
-                className="pointer-events-none absolute inset-0 -z-10 translate-y-[-8%] rounded-[36px] bg-gradient-to-r from-[#5c6ff4]/55 via-[#7b6ff4]/45 to-[#e870c2]/60 opacity-65 blur-2xl transition-opacity duration-500"
-                aria-hidden="true"
-              />
-              <div
-                className="pointer-events-none absolute inset-0 -z-10 translate-y-[-8%] rounded-[36px] bg-white/25 opacity-35"
-                style={{ filter: "url(#glass-distortion)", mixBlendMode: "screen" }}
-                aria-hidden="true"
-              />
 
-              <div className="group relative flex h-full min-h-[22rem] flex-col overflow-hidden rounded-[32px] border border-white/65 bg-white p-6 shadow-[0_40px_120px_-60px_rgba(15,23,42,0.35)] ring-1 ring-[#5c6ff4]/45 backdrop-blur-2xl dark:border-white/10 dark:bg-slate-950/75 dark:ring-[#5c6ff4]/30">
-                <div className="pointer-events-none absolute inset-0 rounded-[32px] bg-white/90 dark:bg-white/10" />
+          <div className="flex snap-x snap-mandatory gap-6 overflow-x-auto pb-6 sm:grid sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:pb-0 lg:grid-cols-3">
+            {skillCards.map((card, cardIndex) => (
+              <motion.div
+                key={card.title}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.4 }}
+                transition={{ duration: 0.55, ease: "easeOut", delay: cardIndex * 0.12 }}
+                className="relative min-w-[280px] snap-center sm:min-w-0"
+              >
+                <div
+                  className="pointer-events-none absolute inset-0 -z-10 translate-y-[-8%] rounded-[36px] bg-gradient-to-r from-[#5c6ff4]/55 via-[#7b6ff4]/45 to-[#e870c2]/60 opacity-65 blur-2xl transition-opacity duration-500"
+                  aria-hidden="true"
+                />
+                <div
+                  className="pointer-events-none absolute inset-0 -z-10 translate-y-[-8%] rounded-[36px] bg-white/25 opacity-35"
+                  style={{ filter: "url(#glass-distortion)", mixBlendMode: "screen" }}
+                  aria-hidden="true"
+                />
 
-                <div className="relative flex h-full flex-col justify-between">
-                  <h3 className="text-2xl font-semibold text-slate-900 dark:text-white">
-                    {card.title}
-                  </h3>
+                <div className="group relative flex h-full min-h-[22rem] flex-col overflow-hidden rounded-[32px] border border-white/65 bg-white p-6 shadow-[0_40px_120px_-60px_rgba(15,23,42,0.35)] ring-1 ring-[#5c6ff4]/45 backdrop-blur-2xl dark:border-white/10 dark:bg-slate-950/75 dark:ring-[#5c6ff4]/30">
+                  <div className="pointer-events-none absolute inset-0 rounded-[32px] bg-white/90 dark:bg-white/10" />
 
-                  <ul className="mt-6 space-y-2.5">
-                    {card.skills.map((skill) => (
-                      <li
-                        key={skill}
-                        className="flex items-center justify-between rounded-2xl bg-white px-4 py-3 text-sm font-semibold text-slate-800 shadow-sm dark:bg-white/10 dark:text-white/90"
-                      >
-                        <span>{skill}</span>
-                        <span className="text-xs font-medium uppercase tracking-[0.16em] text-slate-400">
-                          {card.title.split(" ")[0]}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
+                  <div className="relative flex h-full flex-col justify-between">
+                    <h3 className="text-2xl font-semibold text-slate-900 dark:text-white">
+                      {card.title}
+                    </h3>
+
+                    <ul className="mt-6 space-y-2.5">
+                      {card.skills.map((skill) => (
+                        <li
+                          key={skill}
+                          className="flex items-center justify-between rounded-2xl bg-white px-4 py-3 text-sm font-semibold text-slate-800 shadow-sm dark:bg-white/10 dark:text-white/90"
+                        >
+                          <span>{skill}</span>
+                          <span className="text-xs font-medium uppercase tracking-[0.16em] text-slate-400">
+                            {card.title.split(" ")[0]}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="mt-6 flex justify-end gap-2 sm:hidden" />
         </div>
       </div>
     </section>
