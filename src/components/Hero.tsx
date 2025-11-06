@@ -5,6 +5,7 @@ import cvLogo from '../assets/logos/cv.svg';
 import fiverrLogo from '../assets/logos/fiverr.svg';
 import githubLogo from '../assets/logos/github.svg';
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
+import { AppleHelloEnglishEffect } from "@/components/ui/apple-hello-effect";
 
 const AnimatedBlobs: React.FC<{ scrollProgress: number }> = ({ scrollProgress }) => {
   const scale = 1 + scrollProgress * 4;
@@ -64,22 +65,13 @@ const AnimatedBlobs: React.FC<{ scrollProgress: number }> = ({ scrollProgress })
       }}
     >
       <span 
-        className="absolute z-10 flex flex-col items-center text-center text-5xl md:text-5xl font-semibold leading-tight tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.15)] font-[SF Pro Display] space-y-2 select-none"
+        className="absolute z-10 flex items-center text-center select-none"
         style={{
           opacity: textOpacity,
           transition: 'opacity 0.05s ease-out',
         }}
       >
-        <span className="block text-slate-900/90">
-          Scroll for{" "}
-          <span className="bg-gradient-to-r from-[#5c6ff4] to-[#e870c2] bg-clip-text text-transparent font-bold">
-            enter
-          </span>
-        </span>
-        <span className="block text-slate-900/90">in my</span>
-        <span className="block bg-gradient-to-r from-[#5c6ff4] to-[#e870c2] bg-clip-text text-transparent font-bold">
-          Portfolio.
-        </span>
+        <AppleHelloEnglishEffect className="h-[3.2rem] sm:h-[4.2rem] md:h-[4.8rem]" speed={1.1} />
       </span>
 
       <div className="grid" style={{ gridTemplateAreas: "'stack'" }}>
