@@ -2,6 +2,7 @@ import Header from './components/Header';
 import Hero from './components/Hero';
 import About from './components/About';
 import Journey from './components/Journey';
+import Skills from './components/Skills';
 import Footer from './components/Footer';
 import Contact from './components/Contact';
 import { BackgroundGradientAnimation } from './components/ui/background-gradient-animation';
@@ -26,6 +27,7 @@ function App() {
           <div className="flex flex-col">
             <About />
             <Journey />
+            <Skills />
             <Contact />
             <Footer />
           </div>

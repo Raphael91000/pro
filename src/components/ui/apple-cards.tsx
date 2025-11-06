@@ -7,10 +7,11 @@ interface AppleCardsProps {
 
 interface CardData {
   id: number;
-  src: string;
   title: string;
   zoomTitle: string;
   zoomBody: string;
+  src?: string;
+  backgroundClass?: string;
   section?: "education" | "entrepreneurship" | "experience";
 }
 
@@ -115,28 +116,21 @@ export default function AppleCards({
     },
   ];
 
-  // Filtrer les cartes qui ont une image (pas les séparateurs)
-  const cardsWithImages = cards.filter((card) => card.src);
-
   // Mapper les cartes pour le carousel
-  const carouselItems = cardsWithImages.map((card, index) => {
-    return (
-      <Card
-        key={card.id}
-        card={{
-          src: card.src,
-          title: card.title,
-          content: (
-            <div className="whitespace-pre-line text-white">
-              {card.zoomBody}
-            </div>
-          ),
-        }}
-        index={index}
-        layout={true}
-      />
-    );
-  });
+  const carouselItems = cards.map((card, index) => (
+    <Card
+      key={card.id}
+      card={{
+        src: card.src,
+        title: card.title,
+        content: (
+          <div className="whitespace-pre-line text-white">{card.zoomBody}</div>
+        ),
+      }}
+      index={index}
+      layout={true}
+    />
+  ));
 
   return (
     <Carousel

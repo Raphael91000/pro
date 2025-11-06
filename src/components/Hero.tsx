@@ -8,6 +8,7 @@ import { BackgroundGradientAnimation } from "@/components/ui/background-gradient
 import { AppleHelloEnglishEffect } from "@/components/ui/apple-hello-effect";
 
 const AnimatedBlobs: React.FC<{ scrollProgress: number }> = ({ scrollProgress }) => {
+  const [showContinue, setShowContinue] = useState(false);
   const scale = 1 + scrollProgress * 4;
   
   const blobStyle = {
@@ -71,7 +72,20 @@ const AnimatedBlobs: React.FC<{ scrollProgress: number }> = ({ scrollProgress })
           transition: 'opacity 0.05s ease-out',
         }}
       >
-        <AppleHelloEnglishEffect className="h-[3.2rem] sm:h-[4.2rem] md:h-[4.8rem]" speed={1.1} />
+        <div className="flex flex-col items-center gap-2">
+          <AppleHelloEnglishEffect
+            className="h-[3.2rem] sm:h-[4.2rem] md:h-[4.8rem]"
+            speed={1.1}
+            onAnimationComplete={() => setShowContinue(true)}
+          />
+          {showContinue && (
+            <span
+              className="text-xs font-medium text-slate-800 opacity-0 animate-[fade-in_0.6s_ease-out_forwards] sm:text-sm md:text-base"
+            >
+              scroll for continue
+            </span>
+          )}
+        </div>
       </span>
 
       <div className="grid" style={{ gridTemplateAreas: "'stack'" }}>
@@ -101,6 +115,16 @@ const AnimatedBlobs: React.FC<{ scrollProgress: number }> = ({ scrollProgress })
           }
           to {
             transform: rotate(360deg);
+          }
+        }
+        @keyframes fade-in {
+          from {
+            opacity: 0;
+            transform: translateY(6px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
           }
         }
       `}</style>
