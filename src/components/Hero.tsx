@@ -71,7 +71,7 @@ const AnimatedBlobs: React.FC<{ scrollProgress: number }> = ({ scrollProgress })
         }}
       >
         <span className="block text-slate-900/90">Welcome to my</span>
-        <span className="block bg-[linear-gradient(90deg,#00c6ff,#7f7fd5,#e684ae,#ffb347,#ffe47a)] bg-clip-text text-transparent font-bold">
+        <span className="block bg-gradient-to-r from-[#5c6ff4] to-[#e870c2] bg-clip-text text-transparent font-bold">
           Portfolio
         </span>
       </span>
@@ -435,7 +435,7 @@ function Hero() {
                     <button
                       key={section.id}
                       onClick={() => scrollToSection(section.id)}
-                      className="rounded-full px-4 py-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-400 hover:bg-[linear-gradient(90deg,#00c6ff,#7f7fd5,#e684ae,#ffb347,#ffe47a)] hover:bg-clip-text hover:text-transparent"
+                      className="rounded-full px-4 py-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-400 hover:bg-gradient-to-r hover:from-[#5c6ff4] hover:to-[#e870c2] hover:bg-clip-text hover:text-transparent transition-all duration-300"
                     >
                       {section.label}
                     </button>
