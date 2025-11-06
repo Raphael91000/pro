@@ -1,12 +1,21 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useSpring,
+  useReducedMotion,
+  useMotionValueEvent,
+} from 'framer-motion';
 import AppleCards from './ui/apple-cards';
+import { journeySkillsProgress } from '../lib/motionValues';
 
 export default function Journey() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [hasReachedLastCard, setHasReachedLastCard] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -29,7 +38,7 @@ export default function Journey() {
   });
 
   useEffect(() => {
-    const unsubscribe = transitionProgress.on("change", (value) => {
+    const unsubscribe = transitionProgress.on('change', (value) => {
       revealProgress.set(hasReachedLastCard ? value : 0);
     });
     return () => unsubscribe();
@@ -59,6 +68,22 @@ export default function Journey() {
   );
   const appleCardsOpacity = useTransform(fastRevealProgress, [0, 1], [1, 0]);
   const appleCardsScale = useTransform(fastRevealProgress, [0, 1], [1, 0.94]);
+  const appleCardsY = useTransform(fastRevealProgress, [0, 1], [0, -40]);
+
+  useMotionValueEvent(fastRevealProgress, 'change', (value) => {
+    if (!prefersReducedMotion) {
+      journeySkillsProgress.set(value);
+    }
+  });
+
+  useEffect(() => {
+    if (prefersReducedMotion) {
+      journeySkillsProgress.set(0);
+    }
+    return () => {
+      journeySkillsProgress.set(0);
+    };
+  }, [prefersReducedMotion]);
 
   return (
     <div
@@ -87,6 +112,7 @@ export default function Journey() {
               x: appleCardsX,
               opacity: appleCardsOpacity,
               scale: appleCardsScale,
+              y: prefersReducedMotion ? 0 : appleCardsY,
             }}
             className="relative z-30 will-change-transform"
           >

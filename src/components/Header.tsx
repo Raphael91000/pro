@@ -1,5 +1,6 @@
 import { Menu, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -36,7 +37,12 @@ export default function Header() {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-none bg-transparent md:hidden">
+    <motion.header
+      initial={{ y: -40, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ delay: 0.25, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+      className="fixed top-0 left-0 right-0 z-50 border-none bg-transparent md:hidden"
+    >
       <div className="mx-auto w-full max-w-3xl px-4 pt-4">
         <div className="relative overflow-hidden rounded-[28px] border border-white/60 bg-white/60 shadow-[0_28px_120px_-48px_rgba(92,111,244,0.55)] backdrop-blur-2xl transition-shadow duration-300">
           <div
@@ -102,6 +108,6 @@ export default function Header() {
           </div>
         </div>
       </div>
-    </header>
+    </motion.header>
   );
 }

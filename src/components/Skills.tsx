@@ -1,6 +1,14 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "framer-motion";
+import { journeySkillsProgress } from "../lib/motionValues";
 
 const skillCards = [
   {
@@ -32,9 +40,46 @@ const skillCards = [
 ];
 
 export default function Skills() {
+  const prefersReducedMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const syncedProgress = useSpring(journeySkillsProgress, {
+    stiffness: 140,
+    damping: 24,
+    mass: 0.9,
+  });
+
+  const { scrollYProgress: skillsScrollProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start 75%", "start 30%"],
+  });
+
+  const localProgressRaw = useTransform(
+    skillsScrollProgress,
+    [0, 1],
+    [0, 1],
+    { clamp: true },
+  );
+  const localProgress = useSpring(localProgressRaw, {
+    stiffness: 150,
+    damping: 26,
+    mass: 0.9,
+  });
+
+  const combinedProgress = useTransform(
+    [syncedProgress, localProgress],
+    ([journeyValue, localValue]) => Math.max(journeyValue, localValue),
+  );
+
+  const headingOpacity = useTransform(combinedProgress, [0.05, 0.35], [0, 1]);
+  const headingY = useTransform(combinedProgress, [0, 1], [40, 0]);
+  const cardsOpacity = useTransform(combinedProgress, [0.12, 1], [0, 1]);
+  const cardsY = useTransform(combinedProgress, [0, 1], [40, 0]);
+
   return (
     <section
       id="skills"
+      ref={sectionRef}
       className="relative -mt-12 overflow-hidden bg-white py-16 text-slate-900 sm:-mt-60 sm:py-20"
     >
       <div className="pointer-events-none absolute inset-0 bg-white" />
@@ -43,10 +88,10 @@ export default function Skills() {
       <div className="relative z-10 mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="relative mt-20">
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.5 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
+            style={{
+              opacity: prefersReducedMotion ? 1 : headingOpacity,
+              y: prefersReducedMotion ? 0 : headingY,
+            }}
             className="absolute -top-32 left-0 text-[2rem] font-bold leading-tight text-slate-900 sm:text-[2.3rem] lg:text-[2.7rem]"
           >
             Browse my{" "}
@@ -55,14 +100,16 @@ export default function Skills() {
             </span>
           </motion.p>
 
-          <div className="flex snap-x snap-mandatory gap-6 overflow-x-auto pb-6 sm:grid sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:pb-0 lg:grid-cols-3">
-            {skillCards.map((card, cardIndex) => (
-              <motion.div
+          <motion.div
+            style={{
+              opacity: prefersReducedMotion ? 1 : cardsOpacity,
+              y: prefersReducedMotion ? 0 : cardsY,
+            }}
+            className="flex snap-x snap-mandatory gap-6 overflow-x-auto pb-6 sm:grid sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:pb-0 lg:grid-cols-3"
+          >
+            {skillCards.map((card) => (
+              <div
                 key={card.title}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.4 }}
-                transition={{ duration: 0.55, ease: "easeOut", delay: cardIndex * 0.12 }}
                 className="relative min-w-[280px] snap-center sm:min-w-0"
               >
                 <div
@@ -98,9 +145,9 @@ export default function Skills() {
                     </ul>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
-          </div>
+          </motion.div>
 
           <div className="mt-6 flex justify-end gap-2 sm:hidden" />
         </div>

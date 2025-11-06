@@ -11,7 +11,7 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import { cn } from "../../lib/utils";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 
 interface CarouselProps {
@@ -41,6 +41,7 @@ export const Carousel = ({
   initialScroll = 0,
   onEndReachChange,
 }: CarouselProps) => {
+  const prefersReducedMotion = useReducedMotion();
   const carouselRef = React.useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = React.useState(false);
   const [canScrollRight, setCanScrollRight] = React.useState(true);
@@ -119,35 +120,62 @@ export const Carousel = ({
             )}
           ></div>
 
-          <div
+          <motion.div
             className={cn(
               "flex flex-row justify-start gap-4 pl-4",
               "mx-auto max-w-7xl",
             )}
+            variants={
+              prefersReducedMotion
+                ? undefined
+                : {
+                    hidden: { opacity: 1 },
+                    visible: {
+                      opacity: 1,
+                      transition: {
+                        delayChildren: 0.1,
+                        staggerChildren: 0.18,
+                      },
+                    },
+                  }
+            }
+            initial={prefersReducedMotion ? undefined : "hidden"}
+            whileInView={prefersReducedMotion ? undefined : "visible"}
+            viewport={
+              prefersReducedMotion ? undefined : { once: true, amount: 0.55 }
+            }
           >
             {items.map((item, index) => (
               <motion.div
-                initial={{
-                  opacity: 0,
-                  y: 20,
-                }}
-                animate={{
-                  opacity: 1,
-                  y: 0,
-                }}
-                transition={{
-                  duration: 0.5,
-                  delay: 0.2 * index,
-                  ease: "easeOut",
-                }}
-                viewport={{ once: true }}
+                variants={
+                  prefersReducedMotion
+                    ? undefined
+                    : {
+                        hidden: {
+                          opacity: 0,
+                          y: 80,
+                          scale: 0.9,
+                        },
+                        visible: {
+                          opacity: 1,
+                          y: 0,
+                          scale: 1,
+                          transition: {
+                            type: "spring",
+                            stiffness: 110,
+                            damping: 18,
+                            mass: 0.85,
+                          },
+                        },
+                      }
+                }
                 key={"card" + index}
                 className="rounded-3xl last:pr-[5%] md:last:pr-[33%]"
               >
                 {item}
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
         <div className="mr-10 flex justify-end gap-2">
           <button
@@ -296,14 +324,14 @@ export const Card = ({
               exit={{ opacity: 0 }}
               ref={containerRef}
               layoutId={layout ? `card-${card.title}` : undefined}
-              className="relative z-[60] mx-auto my-10 h-fit max-w-5xl rounded-3xl p-4 font-sans md:p-10 overflow-hidden"
+              className="relative z-[60] mx-auto my-10 w-full max-w-5xl rounded-3xl p-4 font-sans md:p-10"
               style={{
                 boxShadow: "0 6px 6px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1)",
               }}
             >
               {/* Glass Layers */}
               <div
-                className="absolute inset-0 z-0 overflow-hidden rounded-3xl"
+                className="pointer-events-none absolute inset-0 z-0 overflow-hidden rounded-3xl"
                 style={{
                   backdropFilter: "blur(3px)",
                   filter: "url(#glass-distortion)",
@@ -313,19 +341,19 @@ export const Card = ({
               {!card.src && (
                 <div
                   className={cn(
-                    "absolute inset-0 z-[5] rounded-3xl",
+                    "pointer-events-none absolute inset-0 z-[5] rounded-3xl",
                     card.backgroundClass ??
                       "bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900",
                   )}
                 />
               )}
               <div
-                className="absolute inset-0 z-10 rounded-3xl"
+                className="pointer-events-none absolute inset-0 z-10 rounded-3xl"
                 style={{ background: "rgba(255, 255, 255, 0.25)" }}
               />
-              <div className="absolute inset-0 z-[15] rounded-3xl bg-black/60 backdrop-blur-sm" />
+              <div className="pointer-events-none absolute inset-0 z-[15] rounded-3xl bg-black/60 backdrop-blur-sm" />
               <div
-                className="absolute inset-0 z-20 rounded-3xl overflow-hidden"
+                className="pointer-events-none absolute inset-0 z-20 rounded-3xl overflow-hidden"
                 style={{
                   boxShadow:
                     "inset 2px 2px 1px 0 rgba(255, 255, 255, 0.5), inset -1px -1px 1px 1px rgba(255, 255, 255, 0.5)",
@@ -333,28 +361,56 @@ export const Card = ({
               />
 
               {/* Content */}
-              <div className="relative z-30">
+              <div className="relative z-30 flex max-h-[85vh] flex-col gap-4 md:max-h-none">
                 <button
-                  className="sticky top-4 right-0 ml-auto flex h-8 w-8 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/40 transition-colors"
+                  className="sticky top-0 right-0 ml-auto flex h-8 w-8 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm transition-colors hover:bg-white/40"
                   onClick={handleClose}
                 >
                   <IconX className="h-6 w-6 text-white" />
                 </button>
-                {card.category && (
-                  <motion.p
-                    layoutId={layout ? `category-${card.title}` : undefined}
-                    className="text-base font-medium text-white"
-                  >
-                    {card.category}
-                  </motion.p>
-                )}
-                <motion.p
-                  layoutId={layout ? `title-${card.title}` : undefined}
-                  className="mt-4 text-2xl font-semibold text-white md:text-5xl"
-                >
-                  {card.title}
-                </motion.p>
-                <div className="py-10 text-white">{card.content}</div>
+                <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain pr-2 touch-pan-y sm:pr-4 md:pr-6 md:overscroll-auto">
+                  <div className="grid gap-8 md:grid-cols-[minmax(0,320px),1fr] md:items-start">
+                    <div className="relative min-h-[260px] overflow-hidden rounded-2xl border border-white/25 bg-white/5 shadow-[0_30px_90px_-45px_rgba(15,23,42,0.9)] md:min-h-[360px]">
+                      {card.src ? (
+                        <BlurImage
+                          src={card.src}
+                          alt={card.title}
+                          fill
+                          className="absolute inset-0 object-cover"
+                        />
+                      ) : (
+                        <div
+                          className={cn(
+                            "absolute inset-0",
+                            card.backgroundClass ??
+                              "bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900",
+                          )}
+                        />
+                      )}
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                    </div>
+
+                    <div className="flex flex-col gap-6 text-white">
+                      {card.category && (
+                        <motion.p
+                          layoutId={layout ? `category-${card.title}` : undefined}
+                          className="text-base font-medium text-white/80"
+                        >
+                          {card.category}
+                        </motion.p>
+                      )}
+                      <motion.p
+                        layoutId={layout ? `title-${card.title}` : undefined}
+                        className="text-2xl font-semibold text-white md:text-5xl"
+                      >
+                        {card.title}
+                      </motion.p>
+                      <div className="py-6 text-white/90 leading-relaxed [&_*]:text-inherit">
+                        {card.content}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </motion.div>
           </div>

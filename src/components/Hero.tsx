@@ -7,6 +7,7 @@ import githubLogo from '../assets/logos/github.svg';
 import planetLogo from '../assets/logos/planet.svg';
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
 import { AppleHelloEnglishEffect } from "@/components/ui/apple-hello-effect";
+import { motion } from 'framer-motion';
 
 const AnimatedBlobs: React.FC<{ scrollProgress: number }> = ({ scrollProgress }) => {
   const [showContinue, setShowContinue] = useState(false);
@@ -506,7 +507,12 @@ function Hero() {
               transition: 'opacity 0.1s ease-out',
             }}
           >
-            <div className="mt-10 hidden w-full justify-center px-6 md:flex">
+            <motion.div
+              initial={{ y: -40, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.25, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+              className="mt-10 hidden w-full justify-center px-6 md:flex"
+            >
               <GlassEffect
                 className="items-center gap-3 rounded-3xl px-6 py-2.5 text-slate-900 shadow-2xl cursor-default"
                 overlayColor="rgba(255, 255, 255, 0.12)"
@@ -523,13 +529,18 @@ function Hero() {
                   ))}
                 </nav>
               </GlassEffect>
-            </div>
+            </motion.div>
 
-            <div className="mt-auto flex w-full justify-center pb-8 translate-y-2">
+            <motion.div
+              initial={{ y: 36, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.9, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              className="mt-auto flex w-full justify-center pb-8 translate-y-2"
+            >
               <div className="relative" ref={dockRef}>
                 <GlassDock icons={dockIcons} />
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       )}
