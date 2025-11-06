@@ -1,3 +1,4 @@
+import Header from './components/Header';
 import Hero from './components/Hero';
 import About from './components/About';
 import Journey from './components/Journey';
@@ -16,7 +17,9 @@ function App() {
         />
       </div>
 
-      <main className="relative z-10">
+      <Header />
+
+      <main className="relative z-10 pt-24 md:pt-0">
         <Hero />
 
         <section className="relative -mt-24 overflow-visible pt-24 md:-mt-32 md:pt-36">

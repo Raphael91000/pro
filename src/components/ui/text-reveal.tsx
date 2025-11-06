@@ -60,7 +60,7 @@ const TextRevealByWord: FC<TextRevealByWordProps> = ({
               cardClassName
             )}
           >
-            <p className="flex flex-wrap text-2xl font-bold leading-tight text-black/20 dark:text-white/20 md:text-3xl lg:text-4xl xl:text-[2.75rem]">
+            <p className="flex flex-wrap text-[1.35rem] font-semibold leading-snug text-black/20 dark:text-white/20 md:text-[1.75rem] md:leading-tight lg:text-[2.1rem] xl:text-[2.4rem]">
               {words.map((word, i) => {
                 const start = Math.max(0, i * baseSegment - overlap * 0.5);
                 const end = Math.min(1, start + baseSegment + overlap);

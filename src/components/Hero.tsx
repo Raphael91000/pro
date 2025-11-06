@@ -427,7 +427,7 @@ function Hero() {
               transition: 'opacity 0.1s ease-out',
             }}
           >
-            <div className="mt-10 flex w-full justify-center px-6">
+            <div className="mt-10 hidden w-full justify-center px-6 md:flex">
               <GlassEffect
                 className="items-center gap-3 rounded-3xl px-6 py-2.5 text-slate-900 shadow-2xl cursor-default"
                 overlayColor="rgba(255, 255, 255, 0.12)"
