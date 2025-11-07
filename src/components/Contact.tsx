@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { SplineScene } from '@/components/ui/splite';
 import { cn } from '@/lib/utils';
 import { ErrorBoundary } from '@/components/ui/error-boundary';
+import { AnimatePresence, motion } from 'framer-motion';
 
 interface ContactFormState {
   name: string;
@@ -17,7 +18,7 @@ export default function Contact() {
     email: '',
     message: '',
   });
-  const [status, setStatus] = useState<'idle' | 'success'>('idle');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -28,11 +29,34 @@ export default function Contact() {
     }));
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setStatus('success');
-    setFormState({ name: '', email: '', message: '' });
-    window.setTimeout(() => setStatus('idle'), 4000);
+    if (status === 'loading') return;
+
+    setStatus('loading');
+    const form = event.currentTarget;
+    const data = new FormData(form);
+
+    try {
+      const response = await fetch('https://formspree.io/f/xvgveydw', {
+        method: 'POST',
+        body: data,
+        headers: { Accept: 'application/json' },
+      });
+
+      if (response.ok) {
+        setStatus('success');
+        form.reset();
+        setFormState({ name: '', email: '', message: '' });
+      } else {
+        setStatus('error');
+      }
+    } catch (error) {
+      console.error(error);
+      setStatus('error');
+    } finally {
+      setTimeout(() => setStatus('idle'), 4000);
+    }
   };
 
   return (
@@ -129,16 +153,46 @@ export default function Contact() {
               <div className="space-y-4">
                 <button
                   type="submit"
-                  className="w-full rounded-2xl bg-[radial-gradient(circle_at_left,rgba(92,111,244,0.8)_0%,rgba(92,111,244,0.55)_45%,rgba(232,112,194,0.8)_100%)] px-6 py-3 text-base font-semibold text-white shadow-[0_20px_45px_-25px_rgba(92,111,244,0.45)] transition-transform duration-200 hover:scale-[1.02] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#5c6ff4]/60"
+                  disabled={status === 'loading'}
+                  className={cn(
+                    'w-full rounded-2xl bg-[radial-gradient(circle_at_left,rgba(92,111,244,0.8)_0%,rgba(92,111,244,0.55)_45%,rgba(232,112,194,0.8)_100%)] px-6 py-3 text-base font-semibold text-white shadow-[0_20px_45px_-25px_rgba(92,111,244,0.45)] transition-transform duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#5c6ff4]/60',
+                    status === 'loading' ? 'cursor-wait opacity-90' : 'hover:scale-[1.02]',
+                  )}
                 >
-                  Send message
+                  <span className="flex items-center justify-center gap-2">
+                    {status === 'loading' && (
+                      <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/60 border-t-white" />
+                    )}
+                    <span>Send message</span>
+                  </span>
                 </button>
 
-                {status === 'success' && (
-                  <p className="rounded-2xl border border-emerald-300/60 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-600">
-                    Thanks for reaching out! I’ll get back to you shortly.
-                  </p>
-                )}
+                <AnimatePresence mode="wait">
+                  {status === 'success' && (
+                    <motion.p
+                      key="success"
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -6 }}
+                      transition={{ duration: 0.25 }}
+                      className="rounded-2xl border border-emerald-300/60 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-600"
+                    >
+                      ✅ Message envoyé !
+                    </motion.p>
+                  )}
+                  {status === 'error' && (
+                    <motion.p
+                      key="error"
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -6 }}
+                      transition={{ duration: 0.25 }}
+                      className="rounded-2xl border border-rose-300/60 bg-rose-500/10 px-4 py-3 text-sm text-rose-600"
+                    >
+                      ❌ Erreur lors de l&apos;envoi.
+                    </motion.p>
+                  )}
+                </AnimatePresence>
               </div>
             </form>
           </div>
