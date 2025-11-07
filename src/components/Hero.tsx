@@ -319,7 +319,6 @@ function Hero() {
       { label: 'French Resume', href: '/CV-RAPHAEL-FR.pdf' },
       { label: 'English Resume', href: '/CV-RAPHAEL-EN.pdf' },
       { label: 'Arabic Resume', href: '/CV-RAPHAEL-AR.pdf' },
-      { label: 'Full Resume (EN)', href: '/CV-COMPLET-EN.pdf' },
     ],
     []
   );
