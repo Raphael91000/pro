@@ -311,7 +311,10 @@ export const Card = ({
       </svg>
       <AnimatePresence>
         {open && (
-          <div className="fixed inset-0 z-50 h-screen overflow-auto">
+          <div
+            className="fixed inset-0 z-50 min-h-screen overflow-y-auto overscroll-contain touch-pan-y"
+            style={{ WebkitOverflowScrolling: "touch" }}
+          >
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -324,9 +327,10 @@ export const Card = ({
               exit={{ opacity: 0 }}
               ref={containerRef}
               layoutId={layout ? `card-${card.title}` : undefined}
-              className="relative z-[60] mx-auto my-10 w-full max-w-5xl rounded-3xl p-4 font-sans md:p-10"
+              className="relative z-[60] mx-auto my-10 flex w-full max-w-5xl max-h-[92vh] flex-col rounded-3xl p-4 font-sans md:p-10"
               style={{
                 boxShadow: "0 6px 6px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1)",
+                WebkitOverflowScrolling: "touch",
               }}
             >
               {/* Glass Layers */}
@@ -361,14 +365,17 @@ export const Card = ({
               />
 
               {/* Content */}
-              <div className="relative z-30 flex max-h-[85vh] flex-col gap-4 md:max-h-none">
+              <div className="relative z-30 flex flex-1 flex-col gap-4">
                 <button
                   className="sticky top-0 right-0 ml-auto flex h-8 w-8 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm transition-colors hover:bg-white/40"
                   onClick={handleClose}
                 >
                   <IconX className="h-6 w-6 text-white" />
                 </button>
-                <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain pr-2 touch-pan-y sm:pr-4 md:pr-6 md:overscroll-auto">
+                <div
+                  className="flex-1 min-h-0 overflow-y-auto overscroll-contain pr-2 touch-pan-y sm:pr-4 md:pr-6 md:overscroll-auto"
+                  style={{ WebkitOverflowScrolling: "touch" }}
+                >
                   <div className="grid gap-8 md:grid-cols-[minmax(0,320px),1fr] md:items-start">
                     <div className="relative min-h-[260px] overflow-hidden rounded-2xl border border-white/25 bg-white/5 shadow-[0_30px_90px_-45px_rgba(15,23,42,0.9)] md:min-h-[360px]">
                       {card.src ? (

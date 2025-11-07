@@ -66,7 +66,10 @@ export default function Contact() {
                   Contact
                 </span>
                 <h2 className="text-3xl font-bold text-slate-900 sm:text-4xl">
-                  Let&apos;s get in touch
+                  Let&apos;s get in{' '}
+                  <span className="text-transparent bg-gradient-to-r from-[#5c6ff4] via-[#7b6ff4] to-[#e870c2] bg-clip-text">
+                    touch.
+                  </span>
                 </h2>
                 <p className="text-base text-slate-600">
                   Share your project idea or just say hello. I aim to reply within 24 hours.
