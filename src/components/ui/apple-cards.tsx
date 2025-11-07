@@ -1,5 +1,6 @@
 import React from "react";
 import { Carousel, Card } from "./apple-cards-carousel";
+import "./apple-cards-carousel.css"; // ✅ Import du CSS responsive ici
 
 interface AppleCardsProps {
   onEndReachedChange?: (atEnd: boolean) => void;
@@ -116,7 +117,6 @@ export default function AppleCards({
     },
   ];
 
-  // Mapper les cartes pour le carousel
   const carouselItems = cards.map((card, index) => (
     <Card
       key={card.id}

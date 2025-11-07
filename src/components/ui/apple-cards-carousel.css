@@ -1,0 +1,39 @@
+/* ✅ Responsive images pour le carousel */
+
+@media (max-width: 1024px) {
+    .apple-card img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      border-radius: 1rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .apple-card img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      border-radius: 0.75rem;
+    }
+  
+    .apple-card {
+      padding: 0.5rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .apple-card img {
+      width: 100%;
+      height: auto;
+      max-height: 60vh;
+      object-fit: cover;
+      border-radius: 0.5rem;
+    }
+  
+    .apple-card {
+      width: 100%;
+      margin: 0 auto;
+    }
+  }
+  
