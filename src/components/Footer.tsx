@@ -1,9 +1,9 @@
 export default function Footer() {
   const navItems = [
-    { id: 'hero', label: 'Accueil' },
-    { id: 'about', label: 'À propos' },
+    { id: 'hero', label: 'Home' },
+    { id: 'about', label: 'About' },
     { id: 'journey', label: 'My Journey' },
-    { id: 'skills', label: 'Compétences' },
+    { id: 'skills', label: 'Skills' },
     { id: 'contact', label: 'Contact' },
   ];
 
@@ -26,6 +26,9 @@ export default function Footer() {
             </button>
           ))}
         </nav>
+        <p className="text-xs text-slate-500">
+          © {new Date().getFullYear()} — All rights reserved.
+        </p>
       </div>
     </footer>
   );
