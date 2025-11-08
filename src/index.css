@@ -270,3 +270,28 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   backface-visibility: hidden;
 }
+:root {
+  --pause-animations: running;
+}
+
+/* ♿ Réduit toutes les animations si l’utilisateur l’a demandé */
+.reduce-motion * {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* ⏸️ Pause automatique des animations quand l’onglet est inactif */
+* {
+  animation-play-state: var(--pause-animations, running) !important;
+}
+
+/* 🚦 Mode GPU faible : désactive les filtres et flous coûteux */
+.gpu-low .blur-lg,
+.gpu-low .blur-xl,
+.gpu-low [style*="filter"],
+.gpu-low .shadow-lg,
+.gpu-low .shadow-xl {
+  filter: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
