@@ -23,7 +23,7 @@ export default function AppleCards({
     // --- Entrepreneurship ---
     {
       id: 1,
-      src: "/FELIZBELLA.png",
+      src: "/FELIZBELLA.webp",
       title: "Felizbella Cosmetic",
       zoomTitle: "Co-Founder – Felizbella Cosmetic",
       zoomBody:
@@ -32,7 +32,7 @@ export default function AppleCards({
     },
     {
       id: 2,
-      src: "/KRGLOBAL.png",
+      src: "/KRGLOBAL.webp",
       title: "KR Global Solution",
       zoomTitle: "Co-Founder – KR GLOBAL SOLUTION",
       zoomBody:
@@ -41,7 +41,7 @@ export default function AppleCards({
     },
     {
       id: 4,
-      src: "/WASH.png",
+      src: "/WASH.webp",
       title: "Wash Center",
       zoomTitle: "Co-Founder – Wash Center",
       zoomBody:
@@ -50,7 +50,7 @@ export default function AppleCards({
     },
     {
       id: 5,
-      src: "/TRANSPORT.png",
+      src: "/TRANSPORT.webp",
       title: "Package Transport Company",
       zoomTitle: "Co-Founder – Package Transport Company",
       zoomBody:
@@ -59,7 +59,7 @@ export default function AppleCards({
     },
     {
       id: 8,
-      src: "/KIN.png",
+      src: "/KIN.webp",
       title: "Le Kin Di Thaï",
       zoomTitle: "Co-Founder – Le Kin Di Thaï",
       zoomBody:
@@ -70,7 +70,7 @@ export default function AppleCards({
     // --- Expériences professionnelles ---
     {
       id: 3,
-      src: "/CTBG.png",
+      src: "/CTBG.webp",
       title: "CTBG",
       zoomTitle: "Technical Sales Representative – CTBG",
       zoomBody:
@@ -79,7 +79,7 @@ export default function AppleCards({
     },
     {
       id: 10,
-      src: "/MURPROTEC.png",
+      src: "/MURPROTEC.webp",
       title: "Murprotec",
       zoomTitle: "Technical Sales Representative – Murprotec (2023–2024)",
       zoomBody:
@@ -88,7 +88,7 @@ export default function AppleCards({
     },
     {
       id: 6,
-      src: "/GEODIS.png",
+      src: "/GEODIS.webp",
       title: "Geodis / Darty",
       zoomTitle: "Order Picker – GEODIS / DARTY",
       zoomBody:
@@ -97,7 +97,7 @@ export default function AppleCards({
     },
     {
       id: 7,
-      src: "/CAZY.png",
+      src: "/CAZY.webp",
       title: "Cazy Guillaume",
       zoomTitle: "Mason – Cazy Guillaume",
       zoomBody:
@@ -108,7 +108,7 @@ export default function AppleCards({
     // --- Éducation ---
     {
       id: 9,
-      src: "/SCHOOL.png",
+      src: "/SCHOOL.webp",
       title: "Education",
       zoomTitle: "Education",
       zoomBody:

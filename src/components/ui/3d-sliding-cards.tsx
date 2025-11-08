@@ -14,16 +14,16 @@ export default function FloatingCards() {
   useEffect(() => {
     // Utiliser les images existantes
     const images: string[] = [
-      '/FELIZBELLA.png',
-      '/KRGLOBAL.png',
-      '/WASH.png',
-      '/TRANSPORT.png',
-      '/KIN.png',
-      '/CTBG.png',
-      '/MURPROTEC.png',
-      '/GEODIS.png',
-      '/CAZY.png',
-      '/SCHOOL.png',
+      '/FELIZBELLA.webp',
+      '/KRGLOBAL.webp',
+      '/WASH.webp',
+      '/TRANSPORT.webp',
+      '/KIN.webp',
+      '/CTBG.webp',
+      '/MURPROTEC.webp',
+      '/GEODIS.webp',
+      '/CAZY.webp',
+      '/SCHOOL.webp',
     ]
 
     const newCards = images.map((img, index) => ({
