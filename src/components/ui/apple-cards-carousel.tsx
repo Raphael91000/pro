@@ -47,6 +47,12 @@ export const Carousel = ({
   const [canScrollRight, setCanScrollRight] = React.useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
   const endReachedRef = useRef(false);
+// ✅ FIX 1 — Safari / mobile : forcer le scroll au début
+useEffect(() => {
+  if (carouselRef.current) {
+    carouselRef.current.scrollLeft = 0;
+  }
+}, []);
 
   useEffect(() => {
     if (carouselRef.current) {
@@ -121,10 +127,12 @@ export const Carousel = ({
           ></div>
 
           <motion.div
-            className={cn(
-              "flex flex-row justify-start gap-4 pl-4",
-              "mx-auto max-w-7xl",
-            )}
+  className={cn(
+    "flex flex-row justify-start gap-4 pl-4",
+    "md:mx-auto md:max-w-7xl",
+  )}
+
+
             variants={
               prefersReducedMotion
                 ? undefined
@@ -170,8 +178,9 @@ export const Carousel = ({
                       }
                 }
                 key={"card" + index}
-                className="rounded-3xl last:pr-[5%] md:last:pr-[33%]"
-              >
+                className="rounded-3xl md:last:pr-[33%]"
+
+             >
                 {item}
               </motion.div>
             ))}
