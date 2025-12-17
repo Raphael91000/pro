@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import {
   motion,
   useScroll,
@@ -14,9 +14,24 @@ import { journeySkillsProgress } from '../lib/motionValues';
 
 export default function Journey() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [hasReachedLastCard, setHasReachedLastCard] = useState(false);
   const prefersReducedMotion = useReducedMotion();
 
+  const [hasReachedLastCard, setHasReachedLastCard] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  /* --------------------------------------------------
+   * Responsive detection (safe client-side)
+   * -------------------------------------------------- */
+  useEffect(() => {
+    const update = () => setIsMobile(window.innerWidth < 768);
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
+
+  /* --------------------------------------------------
+   * Scroll logic (desktop only)
+   * -------------------------------------------------- */
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start center', 'end start'],
@@ -24,12 +39,10 @@ export default function Journey() {
 
   const transitionProgress = useTransform(
     scrollYProgress,
-    [0.52, 0.88],
+    isMobile ? [0.1, 0.4] : [0.52, 0.88],
     [0, 1],
-    { clamp: true },
+    { clamp: true }
   );
-
-  const journeyShiftRange: [string, string] = ['0%', '-55%'];
 
   const revealProgress = useSpring(0, {
     stiffness: 160,
@@ -37,26 +50,45 @@ export default function Journey() {
     mass: 0.9,
   });
 
+  /* --------------------------------------------------
+   * Reveal orchestration
+   * -------------------------------------------------- */
   useEffect(() => {
-    const unsubscribe = transitionProgress.on('change', (value) => {
-      revealProgress.set(hasReachedLastCard ? value : 0);
-    });
-    return () => unsubscribe();
-  }, [transitionProgress, revealProgress, hasReachedLastCard]);
-
-  useEffect(() => {
-    if (!hasReachedLastCard) {
-      revealProgress.set(0);
-    } else {
-      revealProgress.set(transitionProgress.get());
+    if (isMobile || prefersReducedMotion) {
+      revealProgress.set(1);
+      journeySkillsProgress.set(1);
+      return;
     }
-  }, [hasReachedLastCard, revealProgress, transitionProgress]);
 
+    const unsubscribe = transitionProgress.on('change', (v) => {
+      revealProgress.set(hasReachedLastCard ? v : 0);
+    });
+
+    return () => unsubscribe();
+  }, [
+    isMobile,
+    prefersReducedMotion,
+    transitionProgress,
+    revealProgress,
+    hasReachedLastCard,
+  ]);
+
+  /* --------------------------------------------------
+   * Fast reveal phase
+   * -------------------------------------------------- */
   const fastRevealProgress = useTransform(
     revealProgress,
     [0, 0.24],
     [0, 1],
-    { clamp: true },
+    { clamp: true }
+  );
+
+  /* --------------------------------------------------
+   * Motion values
+   * -------------------------------------------------- */
+  const journeyShiftRange = useMemo<[string, string]>(
+    () => ['0%', '-55%'],
+    []
   );
 
   const titleX = useTransform(fastRevealProgress, [0, 1], journeyShiftRange);
@@ -64,40 +96,54 @@ export default function Journey() {
   const appleCardsX = useTransform(
     fastRevealProgress,
     [0, 1],
-    journeyShiftRange,
+    journeyShiftRange
   );
-  const appleCardsOpacity = useTransform(fastRevealProgress, [0, 1], [1, 0]);
-  const appleCardsScale = useTransform(fastRevealProgress, [0, 1], [1, 0.94]);
-  const appleCardsY = useTransform(fastRevealProgress, [0, 1], [0, -40]);
 
-  useMotionValueEvent(fastRevealProgress, 'change', (value) => {
-    if (!prefersReducedMotion) {
-      journeySkillsProgress.set(value);
+  const appleCardsScale = useTransform(
+    fastRevealProgress,
+    [0, 1],
+    [1, 0.94]
+  );
+
+  const appleCardsY = useTransform(
+    fastRevealProgress,
+    [0, 1],
+    [0, -40]
+  );
+
+  /* --------------------------------------------------
+   * External sync (skills)
+   * -------------------------------------------------- */
+  useMotionValueEvent(fastRevealProgress, 'change', (v) => {
+    if (!prefersReducedMotion && !isMobile) {
+      journeySkillsProgress.set(v);
     }
   });
 
-  useEffect(() => {
-    if (prefersReducedMotion) {
-      journeySkillsProgress.set(0);
-    }
-    return () => {
-      journeySkillsProgress.set(0);
-    };
-  }, [prefersReducedMotion]);
-
+  /* --------------------------------------------------
+   * Render
+   * -------------------------------------------------- */
   return (
     <div
       ref={containerRef}
-      className="relative -mt-32 sm:-mt-40 lg:-mt-48 min-h-[120vh] sm:min-h-[135vh] lg:min-h-[155vh]"
+      className="
+        relative
+        -mt-32 sm:-mt-40 lg:-mt-48
+        min-h-[120vh] sm:min-h-[135vh] lg:min-h-[155vh]
+      "
     >
       <section
         id="journey"
-        className="sticky top-0 flex h-screen items-center overflow-hidden"
+        className="
+          sticky top-0 h-screen
+          flex items-center overflow-hidden
+          max-md:static max-md:h-auto
+        "
       >
         <div className="relative mx-auto flex h-full w-full max-w-7xl flex-col justify-center px-4 sm:px-6 lg:px-8">
           <motion.div
-            className="relative z-28 mt-10 mb-0 text-left sm:pl-4 lg:pl-6"
-            style={{ x: titleX }}
+            className="relative z-20 mt-10 text-left sm:pl-4 lg:pl-6"
+            style={{ x: isMobile ? 0 : titleX }}
           >
             <motion.h2 className="text-[2rem] font-bold leading-tight text-slate-700 sm:text-[2.3rem] lg:text-[2.7rem]">
               <span>Switch and click for discover </span>
@@ -108,13 +154,13 @@ export default function Journey() {
           </motion.div>
 
           <motion.div
-            style={{
-              x: appleCardsX,
-              opacity: appleCardsOpacity,
-              scale: appleCardsScale,
-              y: prefersReducedMotion ? 0 : appleCardsY,
-            }}
             className="relative z-30 will-change-transform"
+            style={{
+              x: isMobile ? 0 : appleCardsX,
+              scale: isMobile ? 1 : appleCardsScale,
+              y: isMobile || prefersReducedMotion ? 0 : appleCardsY,
+              opacity: 1,
+            }}
           >
             <AppleCards onEndReachedChange={setHasReachedLastCard} />
           </motion.div>
