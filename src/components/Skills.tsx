@@ -80,27 +80,15 @@ export default function Skills() {
     <section
       id="skills"
       ref={sectionRef}
-      className="relative -mt-12 overflow-hidden bg-white py-16 text-slate-900 sm:-mt-60 sm:py-20"
+      className="relative overflow-hidden bg-white py-16 text-slate-900 sm:py-20"
+      style={{ position: 'sticky', top: 0, zIndex: 200, borderRadius: '2rem 2rem 0 0' }}
     >
       <div className="pointer-events-none absolute inset-0 bg-white" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-56 bg-[linear-gradient(to_bottom,rgba(255,255,255,0)_0%,rgba(92,111,244,0.08)_15%,rgba(232,112,194,0.12)_55%,rgba(255,255,255,1)_100%)]" />
 
       <div className="relative z-10 mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div className="relative mt-20">
-          <motion.p
-            style={{
-              opacity: prefersReducedMotion ? 1 : headingOpacity,
-              y: prefersReducedMotion ? 0 : headingY,
-            }}
-            className="absolute -top-32 left-0 text-[2rem] font-bold leading-tight text-slate-900 sm:text-[2.3rem] lg:text-[2.7rem]"
-          >
-            Browse my{" "}
-            <span className="bg-gradient-to-r from-[#5c6ff4] via-[#7b6ff4] to-[#e870c2] bg-clip-text text-transparent">
-              skills.
-            </span>
-          </motion.p>
-
-          <motion.div
+        <div className="relative">
+<motion.div
             style={{
               opacity: prefersReducedMotion ? 1 : cardsOpacity,
               y: prefersReducedMotion ? 0 : cardsY,
@@ -113,7 +101,7 @@ export default function Skills() {
                 className="relative min-w-[280px] snap-center sm:min-w-0"
               >
                 <div
-                  className="pointer-events-none absolute inset-0 -z-10 translate-y-[-8%] rounded-[36px] bg-gradient-to-r from-[#5c6ff4]/55 via-[#7b6ff4]/45 to-[#e870c2]/60 opacity-65 blur-2xl transition-opacity duration-500"
+                  className="pointer-events-none absolute inset-0 -z-10 translate-y-[-8%] rounded-[36px] bg-gradient-to-r from-[#1a0a2e]/55 via-[#6b0f4e]/45 to-[#ff0066]/60 opacity-65 blur-2xl transition-opacity duration-500"
                   aria-hidden="true"
                 />
                 <div

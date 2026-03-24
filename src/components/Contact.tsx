@@ -69,15 +69,16 @@ export default function Contact() {
     <section
       id="contact"
       className="relative overflow-hidden py-16 text-slate-900 sm:py-20"
+      style={{ position: 'sticky', top: 0, zIndex: 300, borderRadius: '2rem 2rem 0 0' }}
     >
       <div className="relative z-10 mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="overflow-hidden rounded-3xl border border-white/40 bg-white/50 shadow-[0_40px_90px_-50px_rgba(15,23,42,0.25)] backdrop-blur-2xl">
           <div className="grid gap-6 overflow-hidden rounded-3xl lg:grid-cols-[minmax(0,1.25fr)_minmax(0,0.75fr)] lg:gap-0">
-            <div className="relative min-h-[320px] overflow-hidden bg-gradient-to-br from-white/60 via-white/35 to-white/15 lg:min-h-[480px]">
-              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.65)_0%,rgba(226,232,255,0.35)_45%,rgba(203,213,225,0.1)_100%)]" />
+            <div className="relative min-h-[320px] overflow-hidden lg:min-h-[480px]" style={{ background: 'linear-gradient(145deg, #1a0a2e 0%, #6b0f4e 50%, #d4005a 100%)' }}>
+              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,0,102,0.15)_0%,transparent_70%)]" />
               <div className="pointer-events-none absolute inset-0">
-                <div className="absolute -left-1/3 -top-1/4 h-[160%] w-[120%] bg-[radial-gradient(circle_at_center,rgba(92,111,244,0.35)_0%,rgba(92,111,244,0)_70%)] blur-3xl" />
-                <div className="absolute -right-1/2 -bottom-1/3 h-[150%] w-[140%] bg-[radial-gradient(circle_at_center,rgba(232,112,194,0.28)_0%,rgba(232,112,194,0)_72%)] blur-3xl" />
+                <div className="absolute -left-1/3 -top-1/4 h-[160%] w-[120%] bg-[radial-gradient(circle_at_center,rgba(107,15,78,0.35)_0%,rgba(107,15,78,0)_70%)] blur-3xl" />
+                <div className="absolute -right-1/2 -bottom-1/3 h-[150%] w-[140%] bg-[radial-gradient(circle_at_center,rgba(255,0,102,0.28)_0%,rgba(255,0,102,0)_72%)] blur-3xl" />
               </div>
               <ErrorBoundary fallback={<RobotFallback />}>
                 <SplineScene
@@ -97,7 +98,7 @@ export default function Contact() {
                 </span>
                 <h2 className="text-3xl font-bold text-slate-900 sm:text-4xl">
                   Let&apos;s get in{' '}
-                  <span className="text-transparent bg-gradient-to-r from-[#5c6ff4] via-[#7b6ff4] to-[#e870c2] bg-clip-text">
+                  <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(145deg, #1a0a2e 0%, #6b0f4e 35%, #d4005a 65%, #e8005a 80%, #ff0066 100%)' }}>
                     touch.
                   </span>
                 </h2>
@@ -161,9 +162,10 @@ export default function Contact() {
                   type="submit"
                   disabled={status === 'loading'}
                   className={cn(
-                    'w-full rounded-2xl bg-[radial-gradient(circle_at_left,rgba(92,111,244,0.8)_0%,rgba(92,111,244,0.55)_45%,rgba(232,112,194,0.8)_100%)] px-6 py-3 text-base font-semibold text-white shadow-[0_20px_45px_-25px_rgba(92,111,244,0.45)] transition-transform duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#5c6ff4]/60',
+                    'w-full rounded-2xl px-6 py-3 text-base font-semibold text-white shadow-[0_20px_45px_-25px_rgba(255,0,102,0.45)] transition-transform duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff0066]/60',
                     status === 'loading' ? 'cursor-wait opacity-90' : 'hover:scale-[1.02]',
                   )}
+                  style={{ backgroundImage: 'linear-gradient(145deg, #1a0a2e 0%, #6b0f4e 35%, #d4005a 65%, #e8005a 80%, #ff0066 100%)' }}
                 >
                   <span className="flex items-center justify-center gap-2">
                     {status === 'loading' && (

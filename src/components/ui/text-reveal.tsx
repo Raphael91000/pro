@@ -41,7 +41,7 @@ const TextRevealByWord: FC<TextRevealByWordProps> = ({
       className={cn("relative z-0", className)}
       style={{ height: `${containerHeight}vh` }}
     >
-      <div className="sticky top-[15vh] mx-auto flex h-[60vh] w-full max-w-5xl items-center justify-center px-5 py-10 sm:w-[70vw] sm:px-6 md:px-8 md:py-12">
+      <div className="sticky top-[15vh] z-10 mx-auto flex h-[60vh] w-full max-w-5xl items-center justify-center px-5 py-10 sm:w-[70vw] sm:px-6 md:px-8 md:py-12">
         <div className="group relative w-full rounded-[32px] p-[2px]">
           <div
             className="absolute inset-0 -z-10 rounded-[32px] bg-gradient-to-r from-[#5c6ff4]/55 via-[#7b6ff4]/45 to-[#e870c2]/60 opacity-60 blur-2xl transition-opacity duration-500 group-hover:opacity-90"

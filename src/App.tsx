@@ -1,12 +1,13 @@
 import { Suspense, lazy } from "react";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
+import TextScroll from "./components/TextScroll";
+import VelocityText from "./components/VelocityText";
 import { BackgroundGradientAnimation } from "./components/ui/background-gradient-animation";
 import { motion } from "framer-motion";
 import { useGPUEcoMode } from "@/hooks/useGPUEcoMode";
 
 // Lazy loading des sections non critiques
-const About = lazy(() => import("./components/About"));
 const Journey = lazy(() => import("./components/Journey"));
 const Skills = lazy(() => import("./components/Skills"));
 const Contact = lazy(() => import("./components/Contact"));
@@ -17,7 +18,7 @@ function App() {
   useGPUEcoMode();
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-white text-slate-900">
+    <div className="relative min-h-screen bg-white text-slate-900">
       {/* 🌈 Animation de fond Apple-style, optimisée GPU */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -35,9 +36,10 @@ function App() {
       {/* 🔝 Header toujours affiché */}
       <Header />
 
-      <main className="relative z-10 pt-24 md:pt-0">
+      <main className="relative z-10">
         {/* 🎯 Section Hero prioritaire (pour un LCP rapide) */}
         <Hero />
+        <TextScroll />
 
         {/* 💤 Sections secondaires chargées à la demande */}
         <Suspense
@@ -47,10 +49,10 @@ function App() {
             </div>
           }
         >
-          <section className="relative -mt-24 overflow-visible pt-24 md:-mt-32 md:pt-0">
+          <section className="relative">
             <div className="flex flex-col">
-              <About />
               <Journey />
+              <VelocityText />
               <Skills />
               <Contact />
               <Footer />
