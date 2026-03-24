@@ -84,7 +84,7 @@ export default function Skills() {
       style={{ position: 'sticky', top: 0, zIndex: 200, borderRadius: '2rem 2rem 0 0' }}
     >
       <div className="pointer-events-none absolute inset-0 bg-white" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-56 bg-[linear-gradient(to_bottom,rgba(255,255,255,0)_0%,rgba(92,111,244,0.08)_15%,rgba(232,112,194,0.12)_55%,rgba(255,255,255,1)_100%)]" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-56 bg-[linear-gradient(to_bottom,rgba(255,255,255,0)_0%,rgba(212,0,90,0.06)_15%,rgba(255,0,102,0.08)_55%,rgba(255,255,255,1)_100%)]" />
 
       <div className="relative z-10 mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="relative">
@@ -101,7 +101,7 @@ export default function Skills() {
                 className="relative min-w-[280px] snap-center sm:min-w-0"
               >
                 <div
-                  className="pointer-events-none absolute inset-0 -z-10 translate-y-[-8%] rounded-[36px] bg-gradient-to-r from-[#1a0a2e]/55 via-[#6b0f4e]/45 to-[#ff0066]/60 opacity-65 blur-2xl transition-opacity duration-500"
+                  className="pointer-events-none absolute inset-0 -z-10 translate-y-[-8%] rounded-[36px] bg-gradient-to-r from-[#d4005a]/30 via-[#6b0f4e]/20 to-[#ff0066]/30 opacity-65 blur-2xl transition-opacity duration-500"
                   aria-hidden="true"
                 />
                 <div
@@ -110,7 +110,7 @@ export default function Skills() {
                   aria-hidden="true"
                 />
 
-                <div className="group relative flex h-full min-h-[22rem] flex-col overflow-hidden rounded-[32px] border border-white/65 bg-white p-6 shadow-[0_40px_120px_-60px_rgba(15,23,42,0.35)] ring-1 ring-[#5c6ff4]/45 backdrop-blur-2xl dark:border-white/10 dark:bg-slate-950/75 dark:ring-[#5c6ff4]/30">
+                <div className="group relative flex h-full min-h-[22rem] flex-col overflow-hidden rounded-[32px] border border-white/65 bg-white p-6 shadow-[0_40px_120px_-60px_rgba(15,23,42,0.35)] ring-1 ring-[#d4005a]/30 backdrop-blur-2xl dark:border-white/10 dark:bg-slate-950/75 dark:ring-[#d4005a]/20">
                   <div className="pointer-events-none absolute inset-0 rounded-[32px] bg-white/90 dark:bg-white/10" />
 
                   <div className="relative flex h-full flex-col justify-between">
