@@ -1,5 +1,4 @@
 import { Suspense, lazy } from "react";
-import Header from "./components/Header";
 import Hero from "./components/Hero";
 import TextScroll from "./components/TextScroll";
 import VelocityText from "./components/VelocityText";
@@ -32,9 +31,6 @@ function App() {
           className="h-full w-full"
         />
       </motion.div>
-
-      {/* 🔝 Header toujours affiché */}
-      <Header />
 
       <main className="relative z-10">
         {/* 🎯 Section Hero prioritaire (pour un LCP rapide) */}
