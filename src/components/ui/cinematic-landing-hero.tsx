@@ -366,7 +366,7 @@ export function CinematicHero({
                   <div className="absolute top-[170px] -right-[3px] w-[3px] h-[70px] hardware-btn rounded-r-md z-0 scale-x-[-1]" aria-hidden="true" />
 
                   {/* Inner Screen Container — uses flex-1 + margin instead of absolute positioning */}
-                  <div className="flex-1 m-[7px] bg-[#050914] rounded-[2.5rem] overflow-hidden shadow-[inset_0_0_15px_rgba(0,0,0,1)] text-white relative z-10">
+                  <div className="flex-1 m-[7px] bg-[#050914] rounded-[2.5rem] overflow-hidden shadow-[inset_0_0_15px_rgba(0,0,0,1)] text-white relative z-10 transform-gpu isolate">
                     <div className="absolute inset-0 screen-glare z-40 pointer-events-none" aria-hidden="true" />
 
                     {/* Dynamic Island Notch */}
