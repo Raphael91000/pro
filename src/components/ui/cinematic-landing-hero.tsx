@@ -365,6 +365,23 @@ export function CinematicHero({
                   <div className="absolute top-[220px] -left-[3px] w-[3px] h-[45px] hardware-btn rounded-l-md z-0" aria-hidden="true" />
                   <div className="absolute top-[170px] -right-[3px] w-[3px] h-[70px] hardware-btn rounded-r-md z-0 scale-x-[-1]" aria-hidden="true" />
 
+                  {/* Floating Glass Badges — inside mockupRef so they follow 3D transforms */}
+                  <div className="floating-badge absolute flex -top-4 -left-20 floating-ui-badge rounded-2xl p-4 items-center gap-4 z-30">
+                    <span className="text-xl drop-shadow-lg" aria-hidden="true">🔥</span>
+                    <div>
+                      <p className="text-white text-sm font-bold tracking-tight">Site delivered</p>
+                      <p className="text-blue-200/50 text-xs font-medium">Happy client</p>
+                    </div>
+                  </div>
+
+                  <div className="floating-badge absolute flex -bottom-4 -right-20 floating-ui-badge rounded-2xl p-4 items-center gap-4 z-30">
+                    <span className="text-lg drop-shadow-lg" aria-hidden="true">🤝</span>
+                    <div>
+                      <p className="text-white text-sm font-bold tracking-tight">New project</p>
+                      <p className="text-blue-200/50 text-xs font-medium">Started today</p>
+                    </div>
+                  </div>
+
                   {/* Inner Screen Container */}
                   <div className="absolute inset-[7px] bg-[#050914] rounded-[2.5rem] overflow-hidden shadow-[inset_0_0_15px_rgba(0,0,0,1)] text-white z-10" style={{ isolation: 'isolate', transform: 'translateZ(0)', WebkitTransform: 'translateZ(0)' }}>
                     <div className="absolute inset-0 screen-glare z-40 pointer-events-none" aria-hidden="true" />
@@ -431,23 +448,6 @@ export function CinematicHero({
 
                       <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-[120px] h-[4px] bg-white/20 rounded-full shadow-[0_1px_2px_rgba(0,0,0,0.5)]" />
                     </div>
-                  </div>
-                </div>
-
-                {/* Floating Glass Badges */}
-                <div className="floating-badge absolute flex top-6 lg:top-12 left-[-15px] lg:left-[-80px] floating-ui-badge rounded-xl lg:rounded-2xl p-3 lg:p-4 items-center gap-3 lg:gap-4 z-30">
-                  <span className="text-base lg:text-xl drop-shadow-lg" aria-hidden="true">🔥</span>
-                  <div>
-                    <p className="text-white text-xs lg:text-sm font-bold tracking-tight">Site delivered</p>
-                    <p className="text-blue-200/50 text-[10px] lg:text-xs font-medium">Happy client</p>
-                  </div>
-                </div>
-
-                <div className="floating-badge absolute flex bottom-12 lg:bottom-20 right-[-15px] lg:right-[-80px] floating-ui-badge rounded-xl lg:rounded-2xl p-3 lg:p-4 items-center gap-3 lg:gap-4 z-30">
-                  <span className="text-base lg:text-lg drop-shadow-lg" aria-hidden="true">🤝</span>
-                  <div>
-                    <p className="text-white text-xs lg:text-sm font-bold tracking-tight">New project</p>
-                    <p className="text-blue-200/50 text-[10px] lg:text-xs font-medium">Started today</p>
                   </div>
                 </div>
 
