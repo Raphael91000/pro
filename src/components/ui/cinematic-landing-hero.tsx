@@ -342,8 +342,8 @@ export function CinematicHero({
             
             {/* 1. TOP (Mobile) / RIGHT (Desktop): BRAND NAME */}
             <div className="card-right-text gsap-reveal order-1 lg:order-3 flex flex-col items-center lg:items-end justify-center z-20 w-full">
-              <span className="text-6xl md:text-[6rem] lg:text-[8rem] font-black uppercase tracking-tighter text-card-silver-matte lg:block lg:w-full lg:text-right">25 yo</span>
-              <h2 className="text-6xl md:text-[6rem] lg:text-[8rem] font-black uppercase tracking-tighter text-card-silver-matte lg:mt-0 lg:w-full lg:text-right">
+              <span className="text-6xl md:text-[6rem] lg:text-[8rem] font-black uppercase tracking-tighter text-card-silver-matte">25 yo</span>
+              <h2 className="text-6xl md:text-[6rem] lg:text-[8rem] font-black uppercase tracking-tighter text-card-silver-matte lg:mt-0 lg:self-start">
                 {brandName}
               </h2>
             </div>
