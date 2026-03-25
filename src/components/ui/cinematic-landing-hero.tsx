@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
@@ -167,6 +167,166 @@ const INJECTED_STYLES = `
   }
 
 `;
+
+// ── Social Dock ────────────────────────────────────────────────────────────
+
+const webOptions = [
+  { label: "Siteasy",  href: "https://siteeasy.krglobalsolutionsltd.com/" },
+  { label: "Codio",    href: "https://www.codio.studio/" },
+  { label: "NeuroBot", href: "https://error404-two.vercel.app/" },
+];
+
+const GRAD = "linear-gradient(135deg, #ff0066 0%, #d4005a 40%, #6b0f4e 100%)";
+const iconClass = "flex items-center justify-center w-16 h-16 rounded-2xl bg-white/10 hover:bg-white/20 transition-all duration-200 hover:scale-125 cursor-pointer";
+
+const DockIcon = ({ label, children }: { label: string; children: React.ReactNode }) => (
+  <div className="relative group flex flex-col items-center">
+    <div className="absolute bottom-full mb-3 flex flex-col items-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+      <div
+        className="px-3 py-1.5 rounded-lg text-white text-xs font-semibold whitespace-nowrap"
+        style={{ background: GRAD }}
+      >
+        {label}
+      </div>
+      <div
+        className="w-0 h-0"
+        style={{
+          borderLeft: "6px solid transparent",
+          borderRight: "6px solid transparent",
+          borderTop: "6px solid #d4005a",
+        }}
+      />
+    </div>
+    {children}
+  </div>
+);
+
+// Applique le dégradé sur une image SVG via CSS mask
+const GradientImg = ({ src, alt }: { src: string; alt: string }) => (
+  <div
+    aria-label={alt}
+    style={{
+      width: 26, height: 26,
+      background: GRAD,
+      WebkitMaskImage: `url(${src})`,
+      WebkitMaskRepeat: "no-repeat",
+      WebkitMaskSize: "contain",
+      WebkitMaskPosition: "center",
+      maskImage: `url(${src})`,
+      maskRepeat: "no-repeat",
+      maskSize: "contain",
+      maskPosition: "center",
+    }}
+  />
+);
+
+function SocialDock() {
+  const [webOpen, setWebOpen] = useState(false);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const onScroll = () => setVisible(window.scrollY < 50);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  return (
+    <div
+      className="absolute bottom-6 left-1/2 z-30 pointer-events-auto transition-all duration-300"
+      style={{
+        transform: "translateX(-50%)",
+        opacity: visible ? 1 : 0,
+        pointerEvents: visible ? "auto" : "none",
+      }}
+    >
+      {/* Web dropdown */}
+      {webOpen && (
+        <div className="absolute bottom-full mb-3 w-56 rounded-2xl border border-white/20 bg-black/40 backdrop-blur-xl p-2 flex flex-col gap-1" style={{ left: "calc(50% + 40px)", transform: "translateX(-50%)" }}>
+          {webOptions.map((opt) => (
+            <a
+              key={opt.href}
+              href={opt.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setWebOpen(false)}
+              className="rounded-xl px-3 py-2 text-sm text-white font-medium hover:bg-white/20 transition-colors"
+            >
+              {opt.label}
+            </a>
+          ))}
+        </div>
+      )}
+
+      <div className="flex items-center gap-2 px-4 py-3 rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md">
+
+        {/* LinkedIn */}
+        <DockIcon label="LinkedIn">
+          <a href="https://www.linkedin.com/in/raphael-theuillon-689139261/" target="_blank" rel="noopener noreferrer" className={iconClass}>
+            <svg width="36" height="36" viewBox="0 0 24 24">
+              <defs>
+                <linearGradient id="g-li" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#ff0066"/><stop offset="40%" stopColor="#d4005a"/><stop offset="100%" stopColor="#6b0f4e"/>
+                </linearGradient>
+              </defs>
+              <path fill="url(#g-li)" d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+              <rect fill="url(#g-li)" x="2" y="9" width="4" height="12"/>
+              <circle fill="url(#g-li)" cx="4" cy="4" r="2"/>
+            </svg>
+          </a>
+        </DockIcon>
+
+        {/* GitHub */}
+        <DockIcon label="GitHub">
+          <a href="https://github.com/Raphael91000" target="_blank" rel="noopener noreferrer" className={iconClass}>
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
+              <defs>
+                <linearGradient id="g-gh" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#ff0066"/><stop offset="40%" stopColor="#d4005a"/><stop offset="100%" stopColor="#6b0f4e"/>
+                </linearGradient>
+              </defs>
+              <path fill="url(#g-gh)" d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
+            </svg>
+          </a>
+        </DockIcon>
+
+        {/* Divider */}
+        <div className="w-px h-6 bg-white/25 mx-1" />
+
+        {/* Sites web */}
+        <DockIcon label="Sites web">
+          <button onClick={() => setWebOpen((v) => !v)} className={iconClass} aria-label="Sites web">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" strokeLinecap="round" strokeLinejoin="round">
+              <defs>
+                <linearGradient id="g-globe" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#ff0066"/><stop offset="40%" stopColor="#d4005a"/><stop offset="100%" stopColor="#6b0f4e"/>
+                </linearGradient>
+              </defs>
+              <circle cx="12" cy="12" r="10" stroke="url(#g-globe)" strokeWidth="2"/>
+              <line x1="2" y1="12" x2="22" y2="12" stroke="url(#g-globe)" strokeWidth="2"/>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" stroke="url(#g-globe)" strokeWidth="2"/>
+            </svg>
+          </button>
+        </DockIcon>
+
+        {/* WhatsApp */}
+        <DockIcon label="WhatsApp">
+          <a href="https://wa.me/33761848332" target="_blank" rel="noopener noreferrer" className={iconClass}>
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
+              <defs>
+                <linearGradient id="g-wa" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#ff0066"/><stop offset="40%" stopColor="#d4005a"/><stop offset="100%" stopColor="#6b0f4e"/>
+                </linearGradient>
+              </defs>
+              <path fill="url(#g-wa)" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+              <path fill="url(#g-wa)" d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.978-1.304A9.96 9.96 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.96 7.96 0 0 1-4.076-1.117l-.292-.173-3.024.792.807-2.944-.19-.302A7.96 7.96 0 0 1 4 12c0-4.418 3.582-8 8-8s8 3.582 8 8-3.582 8-8 8z"/>
+            </svg>
+          </a>
+        </DockIcon>
+
+      </div>
+    </div>
+  );
+}
 
 export interface CinematicHeroProps extends React.HTMLAttributes<HTMLDivElement> {
   brandName?: string;
@@ -344,7 +504,7 @@ const requestRef = useRef<number>(0);
             
             {/* 1. TOP (Mobile) / RIGHT (Desktop): BRAND NAME */}
             <div className="card-right-text gsap-reveal order-1 lg:order-3 flex flex-col items-center lg:items-end justify-center z-20 w-full">
-<h2 className="text-6xl md:text-[6rem] lg:text-[8rem] font-black uppercase tracking-tighter text-card-silver-matte lg:mt-20 lg:-mr-12">
+<h2 className="text-6xl md:text-[6rem] lg:text-[8rem] font-black uppercase tracking-tighter text-card-silver-matte lg:-mt-8 lg:-mr-12">
                 {brandName}
               </h2>
             </div>
@@ -465,6 +625,10 @@ const requestRef = useRef<number>(0);
           </div>
         </div>
       </div>
+
+      {/* ── Social Dock ─────────────────────────────────────────────── */}
+      <SocialDock />
+
     </div>
   );
 }

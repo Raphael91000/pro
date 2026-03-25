@@ -72,8 +72,8 @@ export default function Journey() {
               {cards.map((card, index) => (
                 <div
                   key={index}
-                  className="grid grid-cols-1 md:grid-cols-2 items-center gap-4 md:gap-8 p-8 md:p-12 rounded-3xl mb-16 sticky"
-                  style={{ top: `${80 + index * 12}px`, backgroundColor: bgColors[index] }}
+                  className="grid grid-cols-1 md:grid-cols-2 items-center gap-4 md:gap-8 p-8 md:p-12 rounded-3xl mb-16 sticky relative"
+                  style={{ top: `${80 + index * 12}px`, backgroundColor: bgColors[index], zIndex: 10 + index }}
                 >
                   {/* Texte */}
                   <div className="flex flex-col justify-center">

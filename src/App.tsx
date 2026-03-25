@@ -1,7 +1,9 @@
 import { Suspense, lazy } from "react";
 import Hero from "./components/Hero";
+import Navbar from "./components/Navbar";
 import TextScroll from "./components/TextScroll";
 import VelocityText from "./components/VelocityText";
+import JourneyBridge from "./components/JourneyBridge";
 import { BackgroundGradientAnimation } from "./components/ui/background-gradient-animation";
 import { motion } from "framer-motion";
 import { useGPUEcoMode } from "@/hooks/useGPUEcoMode";
@@ -33,9 +35,9 @@ function App() {
       </motion.div>
 
       <main className="relative z-10">
+        <Navbar />
         {/* 🎯 Section Hero prioritaire (pour un LCP rapide) */}
         <Hero />
-        <TextScroll />
 
         {/* 💤 Sections secondaires chargées à la demande */}
         <Suspense
@@ -47,7 +49,10 @@ function App() {
         >
           <section className="relative">
             <div className="flex flex-col">
-              <Journey />
+              <JourneyBridge>
+                <TextScroll />
+                <Journey />
+              </JourneyBridge>
               <VelocityText />
               <Skills />
               <Contact />
