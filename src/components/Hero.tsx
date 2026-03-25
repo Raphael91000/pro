@@ -12,7 +12,7 @@ function Hero() {
       cardDescription="Raphael builds fast, modern websites that convert — delivered in less than 7 days."
       metricValue={42}
       metricLabel="Sites Delivered"
-      ctaHeading="Let's work together."
+      ctaHeading="You bring the idea. I build it."
       ctaDescription="Available for freelance missions and full-time opportunities. Let's create something remarkable."
     />
   );

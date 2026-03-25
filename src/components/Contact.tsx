@@ -68,13 +68,19 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="relative overflow-hidden py-16 text-slate-900 sm:py-20"
+      className="relative min-h-screen bg-white overflow-hidden py-16 text-slate-900 sm:py-20 flex flex-col justify-center"
       style={{ position: 'sticky', top: 0, zIndex: 300, borderRadius: '2rem 2rem 0 0' }}
     >
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8">
+        <h2 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl mb-10 text-center">
+          Let&apos;s work{' '}
+          <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(135deg, #ff0066 0%, #d4005a 40%, #6b0f4e 100%)' }}>
+            together.
+          </span>
+        </h2>
         <div className="overflow-hidden rounded-3xl border border-white/40 bg-white/50 shadow-[0_40px_90px_-50px_rgba(15,23,42,0.25)] backdrop-blur-2xl">
-          <div className="grid gap-6 overflow-hidden rounded-3xl lg:grid-cols-[minmax(0,1.25fr)_minmax(0,0.75fr)] lg:gap-0">
-            <div className="relative min-h-[320px] overflow-hidden lg:min-h-[480px]" style={{ background: 'linear-gradient(145deg, #1a0a2e 0%, #6b0f4e 50%, #d4005a 100%)' }}>
+          <div className="grid gap-6 overflow-hidden rounded-3xl lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-0">
+            <div className="relative min-h-[240px] overflow-hidden lg:min-h-[340px]" style={{ background: 'linear-gradient(145deg, #1a0a2e 0%, #6b0f4e 50%, #d4005a 100%)' }}>
               <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,0,102,0.15)_0%,transparent_70%)]" />
               <div className="pointer-events-none absolute inset-0">
                 <div className="absolute -left-1/3 -top-1/4 h-[160%] w-[120%] bg-[radial-gradient(circle_at_center,rgba(107,15,78,0.35)_0%,rgba(107,15,78,0)_70%)] blur-3xl" />
@@ -90,13 +96,13 @@ export default function Contact() {
 
             <form
               onSubmit={handleSubmit}
-              className="flex flex-col justify-between space-y-6 px-6 py-8 sm:px-8 sm:py-10 lg:px-10 lg:py-12"
+              className="flex flex-col justify-between space-y-3 px-5 py-5 sm:px-7 sm:py-6 lg:px-8 lg:py-7"
             >
               <div className="space-y-4">
                 <span className="inline-flex items-center text-sm font-medium uppercase tracking-[0.3em] text-slate-500">
                   Contact
                 </span>
-                <h2 className="text-3xl font-bold text-slate-900 sm:text-4xl">
+                <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">
                   Let&apos;s get in{' '}
                   <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(145deg, #1a0a2e 0%, #6b0f4e 35%, #d4005a 65%, #e8005a 80%, #ff0066 100%)' }}>
                     touch.
@@ -107,7 +113,7 @@ export default function Contact() {
                 </p>
               </div>
 
-              <div className="space-y-6">
+              <div className="space-y-4">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-slate-700">
                     Full name
@@ -147,7 +153,7 @@ export default function Contact() {
                   <textarea
                     id="message"
                     name="message"
-                    rows={4}
+                    rows={2}
                     required
                     value={formState.message}
                     onChange={handleChange}

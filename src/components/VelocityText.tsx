@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
-const TEXT = "Not a CS graduate. Never went to coding school. Learned everything alone, from scratch, on my own time. Built real businesses. Failed. Started over. Figured it out. Self-taught and proud of it. —";
+const TEXT = "Not a CS grad. Not a bootcamp kid. Just me, the internet, and way too many late nights. —";
 
 export default function VelocityText() {
   const sectionRef  = useRef<HTMLDivElement>(null);
