@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 // Le path part vers la droite depuis le "e" (direction naturelle de la boucle),
 // fait une boucle, puis descend vers la section Journey
@@ -22,13 +22,20 @@ interface AnchorPos {
 export default function JourneyBridge({ children }: { children: React.ReactNode }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState<AnchorPos | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
-  // "start -10%" = quand le haut du wrapper est 10% au-dessus du viewport
-  //   => scrollY ≈ 110vh = exactement quand TextScroll finit son animation
-  // "start -120%" = scrollY ≈ 220vh = ligne totalement tracée
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  // Mobile : offset réduit pour que le tracé se complète plus vite
+  // Desktop : offset original inchangé
   const { scrollYProgress } = useScroll({
     target: wrapperRef,
-    offset: ["start -10%", "start -120%"],
+    offset: isMobile ? ["start -10%", "start -55%"] : ["start -10%", "start -120%"],
   });
 
   const pathLength = useTransform(scrollYProgress, [0, 1], [0, 1]);

@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   motion,
   useReducedMotion,
@@ -172,6 +172,14 @@ const skillCards = [
 export default function Skills() {
   const prefersReducedMotion = useReducedMotion();
   const sectionRef = useRef<HTMLElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   const syncedProgress = useSpring(journeySkillsProgress, { stiffness: 140, damping: 24, mass: 0.9 });
 
@@ -196,7 +204,7 @@ export default function Skills() {
       id="skills"
       ref={sectionRef}
       className="relative bg-white py-16 pb-24 text-slate-900 sm:py-20 sm:pb-28"
-      style={{ position: 'sticky', top: 0, zIndex: 200, borderRadius: '2rem 2rem 0 0' }}
+      style={{ position: isMobile ? 'relative' : 'sticky', top: 0, zIndex: 200, borderRadius: '2rem 2rem 0 0' }}
     >
       <div className="pointer-events-none absolute inset-0 bg-white" />
 
@@ -218,6 +226,7 @@ export default function Skills() {
             />
           ))}
         </motion.div>
+
       </div>
     </section>
   );

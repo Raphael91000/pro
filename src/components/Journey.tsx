@@ -63,17 +63,17 @@ const AnimatedHeader = () => {
 
 export default function Journey() {
   return (
-    <div id="journey" className="bg-white font-sans">
+    <div id="journey" className="bg-white font-sans -mt-64 md:mt-0">
       <div className="px-[5%]">
         <div className="max-w-7xl mx-auto">
-          <section className="pt-24 md:pt-48 pb-0 flex flex-col items-center">
+          <section className="pt-0 md:pt-48 pb-0 flex flex-col items-center">
 
             <div className="w-full">
               {cards.map((card, index) => (
                 <div
                   key={index}
                   className="grid grid-cols-1 md:grid-cols-2 items-center gap-4 md:gap-8 p-8 md:p-12 rounded-3xl mb-16 sticky relative"
-                  style={{ top: `${80 + index * 12}px`, backgroundColor: bgColors[index], zIndex: 10 + index }}
+                  style={{ top: `${80 + index * 12}px`, backgroundColor: bgColors[index], zIndex: 10 + index, willChange: "transform", backfaceVisibility: "hidden" }}
                 >
                   {/* Texte */}
                   <div className="flex flex-col justify-center">

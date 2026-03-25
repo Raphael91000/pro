@@ -34,9 +34,9 @@ function App() {
         />
       </motion.div>
 
+      <Navbar />
+
       <main className="relative z-10">
-        <Navbar />
-        {/* 🎯 Section Hero prioritaire (pour un LCP rapide) */}
         <Hero />
 
         {/* 💤 Sections secondaires chargées à la demande */}

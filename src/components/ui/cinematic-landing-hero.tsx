@@ -230,9 +230,16 @@ function SocialDock() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    if (!webOpen) return;
+    const handler = () => setWebOpen(false);
+    document.addEventListener("click", handler);
+    return () => document.removeEventListener("click", handler);
+  }, [webOpen]);
+
   return (
     <div
-      className="absolute bottom-6 left-1/2 z-30 pointer-events-auto transition-all duration-300"
+      className="absolute bottom-6 md:bottom-6 left-1/2 z-30 pointer-events-auto transition-all duration-300 max-md:bottom-24"
       style={{
         transform: "translateX(-50%)",
         opacity: visible ? 1 : 0,
@@ -241,7 +248,7 @@ function SocialDock() {
     >
       {/* Web dropdown */}
       {webOpen && (
-        <div className="absolute bottom-full mb-3 w-56 rounded-2xl border border-white/20 bg-black/40 backdrop-blur-xl p-2 flex flex-col gap-1" style={{ left: "calc(50% + 40px)", transform: "translateX(-50%)" }}>
+        <div className="absolute bottom-full mb-3 w-56 rounded-2xl border border-black/10 bg-white backdrop-blur-xl p-2 flex flex-col gap-1 shadow-xl" style={{ left: "calc(50% + 40px)", transform: "translateX(-50%)" }}>
           {webOptions.map((opt) => (
             <a
               key={opt.href}
@@ -249,7 +256,7 @@ function SocialDock() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setWebOpen(false)}
-              className="rounded-xl px-3 py-2 text-sm text-white font-medium hover:bg-white/20 transition-colors"
+              className="rounded-xl px-3 py-2 text-sm text-black font-medium hover:bg-black/5 transition-colors"
             >
               {opt.label}
             </a>
@@ -294,7 +301,7 @@ function SocialDock() {
 
         {/* Sites web */}
         <DockIcon label="Sites web">
-          <button onClick={() => setWebOpen((v) => !v)} className={iconClass} aria-label="Sites web">
+          <button onClick={(e) => { e.stopPropagation(); setWebOpen((v) => !v); }} className={iconClass} aria-label="Sites web">
             <svg width="36" height="36" viewBox="0 0 24 24" fill="none" strokeLinecap="round" strokeLinejoin="round">
               <defs>
                 <linearGradient id="g-globe" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -419,6 +426,7 @@ const requestRef = useRef<number>(0);
           pin: true,
           scrub: 1,
           anticipatePin: 1,
+          invalidateOnRefresh: true,
         },
       });
 
@@ -456,7 +464,13 @@ const requestRef = useRef<number>(0);
 
     }, containerRef);
 
-    return () => ctx.revert();
+    // Force recalcul des positions après le rendu initial (critique sur mobile)
+    const refreshTimer = setTimeout(() => ScrollTrigger.refresh(), 300);
+
+    return () => {
+      clearTimeout(refreshTimer);
+      ctx.revert();
+    };
   },[metricValue]); 
 
   return (

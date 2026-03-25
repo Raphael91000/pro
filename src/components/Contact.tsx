@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SplineScene } from '@/components/ui/splite';
 import { cn } from '@/lib/utils';
 import { ErrorBoundary } from '@/components/ui/error-boundary';
@@ -19,6 +19,14 @@ interface ContactFormState {
 }
 
 export default function Contact() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
   const [formState, setFormState] = useState<ContactFormState>({
     name: '',
     email: '',
@@ -69,7 +77,7 @@ export default function Contact() {
     <section
       id="contact"
       className="relative min-h-screen bg-white overflow-hidden py-16 text-slate-900 sm:py-20 flex flex-col justify-center"
-      style={{ position: 'sticky', top: 0, zIndex: 300, borderRadius: '2rem 2rem 0 0' }}
+      style={{ position: isMobile ? 'relative' : 'sticky', top: 0, zIndex: 300, borderRadius: '2rem 2rem 0 0' }}
     >
       <div className="relative z-10 mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8">
         <h2 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl mb-10 text-center">

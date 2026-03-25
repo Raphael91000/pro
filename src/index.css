@@ -8,7 +8,14 @@
   }
 
   body {
+    overflow-x: hidden;
     @apply antialiased;
+  }
+
+  /* GPU acceleration pour les éléments sticky et animés */
+  .sticky {
+    will-change: transform;
+    backface-visibility: hidden;
   }
   :root {
     --background: 0 0% 100%;

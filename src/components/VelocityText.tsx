@@ -33,12 +33,12 @@ export default function VelocityText() {
       className="bg-white"
     >
       <div
-        style={{ position: "sticky", top: 0, height: "100vh" }}
+        style={{ position: "sticky", top: 0, height: "100vh", overflowX: "clip" }}
         className="flex items-center bg-white"
       >
         <motion.p
           ref={textRef}
-          style={{ x }}
+          style={{ x, willChange: "transform" }}
           className="whitespace-nowrap text-5xl font-black uppercase leading-[0.85] md:text-7xl md:leading-[0.85] pl-8"
         >
           <span style={{
