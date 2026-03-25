@@ -9,11 +9,7 @@ function Hero() {
       tagline1="Turn ideas into"
       tagline2="web products."
       cardHeading="Freelance Web Developer."
-      cardDescription={
-        <>
-          <span className="text-white font-semibold">Raphael</span> designs and builds modern web experiences — from sleek interfaces to robust backends, with a focus on performance and craft.
-        </>
-      }
+      cardDescription="Raphael builds fast, modern websites that convert — delivered in less than 7 days."
       metricValue={42}
       metricLabel="Sites Delivered"
       ctaHeading="Let's work together."
