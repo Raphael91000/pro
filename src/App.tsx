@@ -39,6 +39,34 @@ function App() {
       <main className="relative z-10">
         <Hero />
 
+        {/* Card dégradé pleine largeur */}
+        <div style={{
+          background: "linear-gradient(325deg, #1a0a2e 0%, #6b0f4e 35%, #d4005a 65%, #e8005a 80%, #ff0066 100%)",
+          height: "25vh",
+          marginTop: "-10vh",
+          marginBottom: "-15vh",
+          marginLeft: "2rem",
+          marginRight: "2rem",
+          position: "relative",
+          zIndex: 5,
+          pointerEvents: "none",
+          borderRadius: "40px",
+          boxShadow: "0 40px 100px -20px rgba(0,0,0,0.9), 0 20px 40px -20px rgba(0,0,0,0.8), inset 0 1px 2px rgba(255,255,255,0.2)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}>
+          <p style={{
+            color: "white",
+            fontSize: "clamp(2.5rem, 7vw, 6rem)",
+            fontWeight: 700,
+            fontFamily: "var(--font-title)",
+            letterSpacing: "-0.02em",
+          }}>
+            Who's behind it?
+          </p>
+        </div>
+
         {/* 💤 Sections secondaires chargées à la demande */}
         <Suspense
           fallback={

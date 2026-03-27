@@ -10,6 +10,11 @@ export default {
 
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--font-body)', 'sans-serif'],
+        body: ['var(--font-body)', 'sans-serif'],
+        title: ['var(--font-title)', 'sans-serif'],
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

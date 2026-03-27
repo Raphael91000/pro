@@ -248,13 +248,6 @@ const GradientImg = ({ src, alt }: { src: string; alt: string }) => (
 
 function SocialDock() {
   const [webOpen, setWebOpen] = useState(false);
-  const [visible, setVisible] = useState(true);
-
-  useEffect(() => {
-    const onScroll = () => setVisible(window.scrollY < 50);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   useEffect(() => {
     if (!webOpen) return;
@@ -268,8 +261,6 @@ function SocialDock() {
       className="hero-dock absolute bottom-12 md:bottom-12 left-10 md:left-16 z-[15] pointer-events-auto transition-all duration-300 max-md:bottom-24"
       style={{
         transform: "translateX(0)",
-        opacity: visible ? 1 : 0,
-        pointerEvents: visible ? "auto" : "none",
       }}
     >
       {/* Web dropdown */}
@@ -438,35 +429,33 @@ const requestRef = useRef<number>(0);
       gsap.set(".cta-wrapper", { autoAlpha: 0, scale: 0.8, filter: "blur(30px)" });
       gsap.set(".app2-hero-img", { autoAlpha: 0 });
       gsap.set([".card-reveal-left", ".card-reveal-right"], { autoAlpha: 0, y: 20 });
-      gsap.set([".app-hero-img", ".hero-dock"], { autoAlpha: 0 });
-
-      const introTl = gsap.timeline({ delay: 0.3 });
-
       // Config GPU globale
       gsap.config({ force3D: true });
 
+      const introTl = gsap.timeline({ delay: 0.3 });
+
       if (!isMobile) {
-        // Desktop : texte + dock de gauche, app.png de droite
+        gsap.set(".app-hero-img", { autoAlpha: 0, xPercent: -50, yPercent: -50, force3D: true });
+        gsap.set(".hero-dock", { autoAlpha: 0, force3D: true });
         gsap.set(".text-track", { autoAlpha: 0, x: -100, filter: "blur(12px)", force3D: true });
         gsap.set(".text-days", { autoAlpha: 0, x: -80, force3D: true });
-        gsap.set(".hero-dock", { autoAlpha: 0, y: 30, force3D: true });
-        // xPercent/yPercent gèrent le centrage, x gère le slide — GSAP les combine sans conflit
-        gsap.set(".app-hero-img", { autoAlpha: 0, x: 120, xPercent: -50, yPercent: -50, force3D: true });
 
         introTl
           .to(".text-track", { duration: 1.6, autoAlpha: 1, x: 0, filter: "blur(0px)", ease: "power4.out", force3D: true, clearProps: "filter" })
           .to(".text-days", { duration: 1.4, autoAlpha: 1, x: 0, ease: "power4.out", force3D: true }, "-=1.1")
-          .to(".hero-dock", { duration: 1.2, autoAlpha: 1, y: 0, ease: "power4.out", force3D: true }, "-=1.0")
-          .to(".app-hero-img", { duration: 1.6, autoAlpha: 1, x: 0, ease: "power4.out", force3D: true }, "-=1.4");
+          .to(".hero-dock", { duration: 0.8, autoAlpha: 1, ease: "power2.out", force3D: true }, 0.2)
+          .to(".app-hero-img", { duration: 1.2, autoAlpha: 1, ease: "power2.out", force3D: true }, 0.5);
       } else {
-        // Mobile : animation originale verticale
+        gsap.set(".app-hero-img", { autoAlpha: 0, force3D: true });
+        gsap.set(".hero-dock", { autoAlpha: 0, force3D: true });
         gsap.set(".text-track", { autoAlpha: 0, y: 60, scale: 0.85, filter: "blur(20px)", rotationX: -20, force3D: true });
         gsap.set(".text-days", { autoAlpha: 0, y: 40, force3D: true });
 
         introTl
           .to(".text-track", { duration: 1.8, autoAlpha: 1, y: 0, scale: 1, filter: "blur(0px)", rotationX: 0, ease: "expo.out", force3D: true, clearProps: "filter" })
           .to(".text-days", { duration: 1.4, autoAlpha: 1, y: 0, ease: "expo.out", force3D: true }, "-=1.0")
-          .to([".app-hero-img", ".hero-dock"], { autoAlpha: 1, duration: 1.2, ease: "power2.out", force3D: true }, "-=1.0");
+          .to(".hero-dock", { duration: 0.8, autoAlpha: 1, ease: "power2.out", force3D: true }, 0.2)
+          .to(".app-hero-img", { duration: 1.2, autoAlpha: 1, ease: "power2.out", force3D: true }, 0.5);
       }
 
       const scrollTl = gsap.timeline({
@@ -479,14 +468,18 @@ const requestRef = useRef<number>(0);
           anticipatePin: 1,
           invalidateOnRefresh: true,
           fastScrollEnd: true,
+          onLeaveBack: () => {
+            gsap.to(".app-hero-img", { autoAlpha: 1, duration: 0.3, overwrite: true });
+            gsap.to(".hero-dock", { autoAlpha: 1, duration: 0.3, overwrite: true });
+          },
         },
       });
 
       scrollTl
-        .set([".app-hero-img", ".hero-dock"], { autoAlpha: 1 }, 0)
         .to(".bg-hero-img", { autoAlpha: 0, ease: "power2.inOut", duration: 1.5 }, 0)
         .to([".hero-text-wrapper", ".bg-grid-theme"], { scale: 1.15, filter: "blur(20px)", opacity: 0.2, ease: "power2.inOut", duration: 2 }, 0)
         .to(".main-card", { y: 0, ease: "power3.inOut", duration: 2 }, 0)
+        .to([".app-hero-img", ".hero-dock"], { autoAlpha: 0, ease: "power2.in", duration: 1, immediateRender: false }, 1)
         .to(".main-card", { width: "100%", height: "100%", borderRadius: "0px", ease: "power3.inOut", duration: 1.5 })
         .fromTo(".mockup-scroll-wrapper",
           { y: 300, autoAlpha: 0, scale: 0.6 },
@@ -505,7 +498,7 @@ const requestRef = useRef<number>(0);
         .to([".mockup-scroll-wrapper", ".floating-badge", ".card-left-text", ".card-right-text"], {
           scale: 0.9, y: -40, autoAlpha: 0, ease: "power3.in", duration: 1.2, stagger: 0.05,
         })
-        .fromTo([".app-hero-img", ".hero-dock"], { autoAlpha: 1 }, { autoAlpha: 0, ease: "power2.in", duration: 0.6 }, "<")
+        .to([".app-hero-img", ".hero-dock"], { autoAlpha: 0, ease: "power2.in", duration: 0.6, immediateRender: false }, "<")
         // Responsive card pullback sizing
         .to(".main-card", {
           width: isMobile ? "92vw" : "85vw",
@@ -561,10 +554,10 @@ const requestRef = useRef<number>(0);
 
       {/* BACKGROUND LAYER 2: Tactile CTA Buttons */}
       <div className="cta-wrapper absolute z-10 flex items-center justify-between w-screen px-24 md:px-40 gsap-reveal pointer-events-none will-change-transform -mt-16">
-        <h2 className="text-[5rem] md:text-[7rem] lg:text-[9rem] font-black tracking-tighter text-silver-matte leading-none whitespace-nowrap -ml-2 md:-ml-4">
+        <h2 className="text-[5rem] md:text-[7rem] lg:text-[9rem] font-black tracking-tighter text-silver-matte leading-none whitespace-nowrap -ml-2 md:-ml-4 font-title">
           I build your
         </h2>
-        <h2 className="text-[5rem] md:text-[7rem] lg:text-[9rem] font-black tracking-tighter text-silver-matte leading-none text-right mr-8 md:mr-12">
+        <h2 className="text-[5rem] md:text-[7rem] lg:text-[9rem] font-black tracking-tighter text-silver-matte leading-none text-right mr-8 md:mr-12 font-title">
           vision.
         </h2>
       </div>
@@ -579,10 +572,10 @@ const requestRef = useRef<number>(0);
           <div className="card-sheen" aria-hidden="true" />
           <img src="/app2.png" alt="" aria-hidden="true" className="app2-hero-img absolute inset-0 w-full h-full object-contain pointer-events-none select-none z-[5]" style={{ opacity: 0 }} />
           <div className="card-reveal-left absolute left-8 lg:left-16 top-1/2 -translate-y-1/2 z-[8] pointer-events-none" style={{ opacity: 0 }}>
-            <span className="text-5xl lg:text-7xl font-black uppercase tracking-tighter text-card-silver-matte">You bring</span>
+            <span className="text-5xl lg:text-7xl font-black uppercase tracking-tighter text-card-silver-matte font-title">You bring</span>
           </div>
           <div className="card-reveal-right absolute right-8 lg:right-16 top-1/2 -translate-y-1/2 z-[8] pointer-events-none text-right" style={{ opacity: 0 }}>
-            <span className="text-5xl lg:text-7xl font-black uppercase tracking-tighter text-card-silver-matte">the idea</span>
+            <span className="text-5xl lg:text-7xl font-black uppercase tracking-tighter text-card-silver-matte font-title">the idea</span>
           </div>
           <div className="app2-halo absolute bottom-0 left-[21.5rem] right-[19.5rem] h-8 pointer-events-none z-[6]" aria-hidden="true" style={{ background: "linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1))", opacity: 0 }} />
 
@@ -591,7 +584,7 @@ const requestRef = useRef<number>(0);
             
             {/* 1. TOP (Mobile) / RIGHT (Desktop): BRAND NAME */}
             <div className="card-right-text gsap-reveal order-1 lg:order-3 flex flex-col items-center lg:items-end justify-center z-20 w-full">
-<h2 className="text-6xl md:text-[6rem] lg:text-[8rem] font-black uppercase tracking-tighter text-card-silver-matte lg:-mt-8 lg:-mr-12">
+<h2 className="text-6xl md:text-[6rem] lg:text-[8rem] font-black uppercase tracking-tighter text-card-silver-matte lg:-mt-8 lg:-mr-12 lg:-translate-x-8" style={{ fontFamily: 'var(--font-title)', marginRight: '0rem' }}>
                 {brandName}
               </h2>
             </div>
