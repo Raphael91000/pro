@@ -107,8 +107,8 @@ export const ProductHighlightCard = React.forwardRef<HTMLDivElement, ProductHigh
             filter: "drop-shadow(0px 6px 12px rgba(0,0,0,0.2))",
           }}
           transition={{ type: "spring", stiffness: 220, damping: 18 }}
-          style={{ transformStyle: "preserve-3d", zIndex: 30 }}
-          className="absolute right-[-2.5rem] bottom-[-2.5rem] h-44 w-44 cursor-default"
+          style={{ transformStyle: "preserve-3d", zIndex: 30, position: "absolute", right: "-2.5rem", bottom: "-2.5rem" }}
+          className="h-44 w-44 cursor-default"
         >
           {imageElement}
         </motion.div>
