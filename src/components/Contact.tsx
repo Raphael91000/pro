@@ -1,15 +1,10 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { SplineScene } from '@/components/ui/splite';
 import { cn } from '@/lib/utils';
-import { ErrorBoundary } from '@/components/ui/error-boundary';
 import {
   AnimatePresence,
   motion,
-  useReducedMotion,
-  useScroll,
-  useTransform,
 } from 'framer-motion';
 
 interface ContactFormState {
@@ -94,12 +89,11 @@ export default function Contact() {
                 <div className="absolute -left-1/3 -top-1/4 h-[160%] w-[120%] bg-[radial-gradient(circle_at_center,rgba(107,15,78,0.35)_0%,rgba(107,15,78,0)_70%)] blur-3xl" />
                 <div className="absolute -right-1/2 -bottom-1/3 h-[150%] w-[140%] bg-[radial-gradient(circle_at_center,rgba(255,0,102,0.28)_0%,rgba(255,0,102,0)_72%)] blur-3xl" />
               </div>
-              <ErrorBoundary fallback={<RobotFallback />}>
-                <SplineScene
-                  scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
-                  className="absolute inset-0 h-full w-full"
-                />
-              </ErrorBoundary>
+              <img
+                src="/app3.png"
+                alt=""
+                className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none scale-105 translate-y-6"
+              />
             </div>
 
             <form
@@ -226,17 +220,3 @@ export default function Contact() {
 
 const inputStyles =
   'mt-2 w-full rounded-2xl border border-white/60 bg-white/75 px-4 py-3 text-base text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-white focus:outline-none focus:ring-2 focus:ring-white/70 transition';
-
-function RobotFallback() {
-  return (
-    <div className="flex h-full w-full flex-col items-center justify-center gap-6 bg-gradient-to-br from-white via-slate-100 to-slate-200 p-10 text-center text-slate-700">
-      <div className="text-base font-semibold uppercase tracking-[0.4em] text-slate-500">
-        Contact
-      </div>
-      <h3 className="text-2xl font-bold text-slate-900">Robot unavailable</h3>
-      <p className="max-w-xs text-sm text-slate-600">
-        The 3D scene couldn&apos;t load right now. Send me a message and I&apos;ll get back to you within 24 hours.
-      </p>
-    </div>
-  );
-}

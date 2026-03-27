@@ -157,7 +157,7 @@ const skillCards = [
   },
   {
     title: "Tools",
-    skills: ["GitHub", "Canva", "CRM", "CapCut", "Microsoft Office", "ChatGPT", "ChatGPT Prompting"],
+    skills: ["GitHub", "Canva", "CRM", "CapCut", "Microsoft Office", "ChatGPT", "ChatGPT Prompting", "Claude Code", "Claude AI", "Claude Cowork"],
     imageElement: <Icon3DTools />,
   },
   {

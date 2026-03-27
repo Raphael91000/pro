@@ -166,6 +166,32 @@ const INJECTED_STYLES = `
       stroke-linecap: round;
   }
 
+  .app-img {
+    position: absolute;
+    bottom: 0;
+    left: 12%;
+    transform: translateX(-50%);
+    width: 200vw;
+    max-width: none;
+    pointer-events: none;
+    user-select: none;
+  }
+  @media (max-width: 767px) {
+    .hero-text-wrapper {
+      padding-bottom: 55vh !important;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .app-img {
+      top: 50%;
+      bottom: auto;
+      left: 60%;
+      width: 80%;
+      max-width: 1100px;
+    }
+  }
+
 `;
 
 // ── Social Dock ────────────────────────────────────────────────────────────
@@ -239,9 +265,9 @@ function SocialDock() {
 
   return (
     <div
-      className="absolute bottom-6 md:bottom-6 left-1/2 z-30 pointer-events-auto transition-all duration-300 max-md:bottom-24"
+      className="hero-dock absolute bottom-12 md:bottom-12 left-10 md:left-16 z-[15] pointer-events-auto transition-all duration-300 max-md:bottom-24"
       style={{
-        transform: "translateX(-50%)",
+        transform: "translateX(0)",
         opacity: visible ? 1 : 0,
         pointerEvents: visible ? "auto" : "none",
       }}
@@ -407,16 +433,41 @@ const requestRef = useRef<number>(0);
     const isMobile = window.innerWidth < 768;
 
     const ctx = gsap.context(() => {
-      gsap.set(".text-track", { autoAlpha: 0, y: 60, scale: 0.85, filter: "blur(20px)", rotationX: -20 });
-      gsap.set(".text-days", { autoAlpha: 0, y: 40 });
       gsap.set(".main-card", { y: window.innerHeight + 200, autoAlpha: 1 });
       gsap.set([".card-left-text", ".card-right-text", ".mockup-scroll-wrapper", ".floating-badge", ".phone-widget"], { autoAlpha: 0 });
       gsap.set(".cta-wrapper", { autoAlpha: 0, scale: 0.8, filter: "blur(30px)" });
+      gsap.set(".app2-hero-img", { autoAlpha: 0 });
+      gsap.set([".card-reveal-left", ".card-reveal-right"], { autoAlpha: 0, y: 20 });
+      gsap.set([".app-hero-img", ".hero-dock"], { autoAlpha: 0 });
 
       const introTl = gsap.timeline({ delay: 0.3 });
-      introTl
-        .to(".text-track", { duration: 1.8, autoAlpha: 1, y: 0, scale: 1, filter: "blur(0px)", rotationX: 0, ease: "expo.out" })
-        .to(".text-days", { duration: 1.4, autoAlpha: 1, y: 0, ease: "expo.out" }, "-=1.0");
+
+      // Config GPU globale
+      gsap.config({ force3D: true });
+
+      if (!isMobile) {
+        // Desktop : texte + dock de gauche, app.png de droite
+        gsap.set(".text-track", { autoAlpha: 0, x: -100, filter: "blur(12px)", force3D: true });
+        gsap.set(".text-days", { autoAlpha: 0, x: -80, force3D: true });
+        gsap.set(".hero-dock", { autoAlpha: 0, y: 30, force3D: true });
+        // xPercent/yPercent gèrent le centrage, x gère le slide — GSAP les combine sans conflit
+        gsap.set(".app-hero-img", { autoAlpha: 0, x: 120, xPercent: -50, yPercent: -50, force3D: true });
+
+        introTl
+          .to(".text-track", { duration: 1.6, autoAlpha: 1, x: 0, filter: "blur(0px)", ease: "power4.out", force3D: true, clearProps: "filter" })
+          .to(".text-days", { duration: 1.4, autoAlpha: 1, x: 0, ease: "power4.out", force3D: true }, "-=1.1")
+          .to(".hero-dock", { duration: 1.2, autoAlpha: 1, y: 0, ease: "power4.out", force3D: true }, "-=1.0")
+          .to(".app-hero-img", { duration: 1.6, autoAlpha: 1, x: 0, ease: "power4.out", force3D: true }, "-=1.4");
+      } else {
+        // Mobile : animation originale verticale
+        gsap.set(".text-track", { autoAlpha: 0, y: 60, scale: 0.85, filter: "blur(20px)", rotationX: -20, force3D: true });
+        gsap.set(".text-days", { autoAlpha: 0, y: 40, force3D: true });
+
+        introTl
+          .to(".text-track", { duration: 1.8, autoAlpha: 1, y: 0, scale: 1, filter: "blur(0px)", rotationX: 0, ease: "expo.out", force3D: true, clearProps: "filter" })
+          .to(".text-days", { duration: 1.4, autoAlpha: 1, y: 0, ease: "expo.out", force3D: true }, "-=1.0")
+          .to([".app-hero-img", ".hero-dock"], { autoAlpha: 1, duration: 1.2, ease: "power2.out", force3D: true }, "-=1.0");
+      }
 
       const scrollTl = gsap.timeline({
         scrollTrigger: {
@@ -424,13 +475,16 @@ const requestRef = useRef<number>(0);
           start: "top top",
           end: "+=7000",
           pin: true,
-          scrub: 1,
+          scrub: 0.8,
           anticipatePin: 1,
           invalidateOnRefresh: true,
+          fastScrollEnd: true,
         },
       });
 
       scrollTl
+        .set([".app-hero-img", ".hero-dock"], { autoAlpha: 1 }, 0)
+        .to(".bg-hero-img", { autoAlpha: 0, ease: "power2.inOut", duration: 1.5 }, 0)
         .to([".hero-text-wrapper", ".bg-grid-theme"], { scale: 1.15, filter: "blur(20px)", opacity: 0.2, ease: "power2.inOut", duration: 2 }, 0)
         .to(".main-card", { y: 0, ease: "power3.inOut", duration: 2 }, 0)
         .to(".main-card", { width: "100%", height: "100%", borderRadius: "0px", ease: "power3.inOut", duration: 1.5 })
@@ -451,16 +505,22 @@ const requestRef = useRef<number>(0);
         .to([".mockup-scroll-wrapper", ".floating-badge", ".card-left-text", ".card-right-text"], {
           scale: 0.9, y: -40, autoAlpha: 0, ease: "power3.in", duration: 1.2, stagger: 0.05,
         })
+        .fromTo([".app-hero-img", ".hero-dock"], { autoAlpha: 1 }, { autoAlpha: 0, ease: "power2.in", duration: 0.6 }, "<")
         // Responsive card pullback sizing
-        .to(".main-card", { 
-          width: isMobile ? "92vw" : "85vw", 
-          height: isMobile ? "92vh" : "85vh", 
-          borderRadius: isMobile ? "32px" : "40px", 
-          ease: "expo.inOut", 
-          duration: 1.8 
-        }, "pullback") 
+        .to(".main-card", {
+          width: isMobile ? "92vw" : "85vw",
+          height: isMobile ? "92vh" : "85vh",
+          borderRadius: isMobile ? "32px" : "40px",
+          ease: "expo.inOut",
+          duration: 1.8
+        }, "pullback")
+        .to(".app2-hero-img", { autoAlpha: 1, ease: "power2.inOut", duration: 1.5 }, "pullback")
+        .to([".card-reveal-left", ".card-reveal-right"], { autoAlpha: 1, y: 0, ease: "expo.out", duration: 1.5, stagger: 0.15 }, "pullback")
         .to(".cta-wrapper", { scale: 1, filter: "blur(0px)", ease: "expo.inOut", duration: 1.8 }, "pullback")
-        .to(".main-card", { y: -window.innerHeight - 300, ease: "power3.in", duration: 1.5 });
+        .set(".main-card", { overflow: "visible" })
+        .to(".main-card", { y: -window.innerHeight - 300, ease: "power3.in", duration: 1.5 })
+        .to([".app2-hero-img", ".app2-halo"], { y: window.innerHeight + 300, ease: "power3.in", duration: 1.5 }, "<")
+        .to(".app2-halo", { opacity: 1, ease: "power2.inOut", duration: 0.6 }, "<");
 
     }, containerRef);
 
@@ -484,8 +544,13 @@ const requestRef = useRef<number>(0);
       <div className="film-grain" aria-hidden="true" />
       <div className="bg-grid-theme absolute inset-0 z-0 pointer-events-none opacity-50" aria-hidden="true" />
 
+      {/* bg.png — fond plein écran */}
+      <img src="/bg.png" alt="" aria-hidden="true" className="bg-hero-img absolute inset-0 w-full h-full object-cover pointer-events-none select-none z-[1]" />
+      {/* app.png — par dessus */}
+      <img src="/app.png" alt="" aria-hidden="true" className="app-img app-hero-img z-[2]" />
+
       {/* BACKGROUND LAYER: Hero Texts */}
-      <div className="hero-text-wrapper absolute z-10 flex flex-col items-center justify-center text-center w-screen px-4 will-change-transform transform-style-3d pointer-events-none">
+      <div className="hero-text-wrapper absolute z-10 flex flex-col items-start justify-center text-left w-screen px-10 md:px-16 will-change-transform transform-style-3d pointer-events-none" style={{ paddingBottom: "26vh" }}>
         <h1 className="text-track gsap-reveal text-3d-matte text-5xl md:text-7xl lg:text-[6rem] font-bold tracking-tight mb-2">
           {tagline1}
         </h1>
@@ -495,13 +560,10 @@ const requestRef = useRef<number>(0);
       </div>
 
       {/* BACKGROUND LAYER 2: Tactile CTA Buttons */}
-      <div className="cta-wrapper absolute z-10 flex flex-col items-center justify-center text-center w-screen px-4 gsap-reveal pointer-events-none will-change-transform">
-        <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight text-silver-matte pb-2">
-          {ctaHeading}
+      <div className="cta-wrapper absolute z-10 flex items-center justify-center w-screen pl-[44rem] gsap-reveal pointer-events-none will-change-transform">
+        <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-silver-matte text-center">
+          {ctaHeading.split(". ")[1]}
         </h2>
-        <p className="text-muted-foreground text-lg md:text-xl mb-12 max-w-xl mx-auto font-light leading-relaxed">
-          {ctaDescription}
-        </p>
       </div>
 
       {/* FOREGROUND LAYER: The Physical Deep Blue Card */}
@@ -512,6 +574,14 @@ const requestRef = useRef<number>(0);
           style={{ touchAction: "pan-y" }}
         >
           <div className="card-sheen" aria-hidden="true" />
+          <img src="/app2.png" alt="" aria-hidden="true" className="app2-hero-img absolute inset-0 w-full h-full object-contain pointer-events-none select-none z-[5]" style={{ opacity: 0 }} />
+          <div className="card-reveal-left absolute left-8 lg:left-16 top-1/2 -translate-y-1/2 z-[8] pointer-events-none" style={{ opacity: 0 }}>
+            <span className="text-5xl lg:text-7xl font-black uppercase tracking-tighter text-card-silver-matte">You bring</span>
+          </div>
+          <div className="card-reveal-right absolute right-8 lg:right-16 top-1/2 -translate-y-1/2 z-[8] pointer-events-none text-right" style={{ opacity: 0 }}>
+            <span className="text-5xl lg:text-7xl font-black uppercase tracking-tighter text-card-silver-matte">the idea</span>
+          </div>
+          <div className="app2-halo absolute bottom-0 left-[21.5rem] right-[19.5rem] h-8 pointer-events-none z-[6]" aria-hidden="true" style={{ background: "linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1))", opacity: 0 }} />
 
           {/* DYNAMIC RESPONSIVE GRID: Flex-col on mobile to force order, Grid on desktop */}
           <div className="relative w-full h-full max-w-7xl mx-auto px-4 lg:px-12 flex flex-col justify-evenly lg:grid lg:grid-cols-3 items-center lg:gap-8 z-10 py-6 lg:py-0">
