@@ -560,9 +560,12 @@ const requestRef = useRef<number>(0);
       </div>
 
       {/* BACKGROUND LAYER 2: Tactile CTA Buttons */}
-      <div className="cta-wrapper absolute z-10 flex items-center justify-center w-screen pl-[44rem] gsap-reveal pointer-events-none will-change-transform">
-        <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-silver-matte text-center">
-          {ctaHeading.split(". ")[1]}
+      <div className="cta-wrapper absolute z-10 flex items-center justify-between w-screen px-24 md:px-40 gsap-reveal pointer-events-none will-change-transform -mt-16">
+        <h2 className="text-[5rem] md:text-[7rem] lg:text-[9rem] font-black tracking-tighter text-silver-matte leading-none whitespace-nowrap -ml-2 md:-ml-4">
+          I build your
+        </h2>
+        <h2 className="text-[5rem] md:text-[7rem] lg:text-[9rem] font-black tracking-tighter text-silver-matte leading-none text-right mr-8 md:mr-12">
+          vision.
         </h2>
       </div>
 
