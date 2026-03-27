@@ -25,6 +25,7 @@ export default function Navbar() {
   const [visible, setVisible] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [ctaHovered, setCtaHovered] = useState(false);
   const lastScrollY = useRef(0);
 
   useEffect(() => {
@@ -109,7 +110,7 @@ export default function Navbar() {
           {!isMobile && (
             <div style={{ display: "flex", alignItems: "center", gap: 32, marginLeft: 32 }}>
               {links.map((l) => (
-                <a key={l.label} href={l.href} style={{ fontSize: 16, fontWeight: 500, color: "#475569", textDecoration: "none" }}>
+                <a key={l.label} href={l.href} className="nav-link" style={{ fontSize: 16, fontWeight: 500, color: "#475569", textDecoration: "none" }}>
                   {l.label}
                 </a>
               ))}
@@ -118,18 +119,43 @@ export default function Navbar() {
 
           {/* CTA desktop */}
           {!isMobile && (
-            <a href="#contact" style={{
-              ...gradientBg,
-              marginLeft: "auto",
-              padding: "10px 22px",
-              borderRadius: "999px",
-              fontSize: 15,
-              fontWeight: 600,
-              color: "white",
-              textDecoration: "none",
-              flexShrink: 0,
-            }}>
-              Let's talk
+            <a
+              href="#contact"
+              onMouseEnter={() => setCtaHovered(true)}
+              onMouseLeave={() => setCtaHovered(false)}
+              style={{
+                ...gradientBg,
+                marginLeft: "auto",
+                padding: "10px 22px",
+                borderRadius: "999px",
+                fontSize: 15,
+                fontWeight: 600,
+                textDecoration: "none",
+                flexShrink: 0,
+                position: "relative",
+                overflow: "hidden",
+                display: "inline-flex",
+                alignItems: "center",
+              }}
+            >
+              <span style={{
+                position: "absolute",
+                inset: 0,
+                background: "white",
+                borderRadius: "inherit",
+                transform: ctaHovered ? "translateX(0)" : "translateX(-101%)",
+                transition: "transform 0.35s cubic-bezier(0.4,0,0.2,1)",
+              }} />
+              <span style={{
+                position: "relative",
+                zIndex: 1,
+                ...(ctaHovered ? {
+                  background: "linear-gradient(135deg, #ff0066 0%, #d4005a 40%, #6b0f4e 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                } : { color: "white" }),
+              }}>Let's talk</span>
             </a>
           )}
 

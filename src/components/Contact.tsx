@@ -14,6 +14,7 @@ interface ContactFormState {
 }
 
 export default function Contact() {
+  const [btnHovered, setBtnHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -169,17 +170,38 @@ export default function Contact() {
                 <button
                   type="submit"
                   disabled={status === 'loading'}
+                  onMouseEnter={() => setBtnHovered(true)}
+                  onMouseLeave={() => setBtnHovered(false)}
                   className={cn(
-                    'w-full rounded-2xl px-6 py-3 text-base font-semibold text-white shadow-[0_20px_45px_-25px_rgba(255,0,102,0.45)] transition-transform duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff0066]/60',
-                    status === 'loading' ? 'cursor-wait opacity-90' : 'hover:scale-[1.02]',
+                    'w-full rounded-2xl px-6 py-3 text-base font-semibold shadow-[0_20px_45px_-25px_rgba(255,0,102,0.45)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff0066]/60',
+                    status === 'loading' ? 'cursor-wait opacity-90' : '',
                   )}
-                  style={{ backgroundImage: 'linear-gradient(145deg, #1a0a2e 0%, #6b0f4e 35%, #d4005a 65%, #e8005a 80%, #ff0066 100%)' }}
+                  style={{
+                    backgroundImage: 'linear-gradient(145deg, #1a0a2e 0%, #6b0f4e 35%, #d4005a 65%, #e8005a 80%, #ff0066 100%)',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    transform: (!btnHovered && status !== 'loading') ? 'scale(1)' : btnHovered ? 'scale(1.02)' : 'scale(1)',
+                    transition: 'transform 0.2s ease',
+                  }}
                 >
-                  <span className="flex items-center justify-center gap-2">
+                  <span style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'white',
+                    borderRadius: 'inherit',
+                    transform: btnHovered && status !== 'loading' ? 'translateX(0)' : 'translateX(-101%)',
+                    transition: 'transform 0.35s cubic-bezier(0.4,0,0.2,1)',
+                  }} />
+                  <span className="flex items-center justify-center gap-2" style={{ position: 'relative', zIndex: 1 }}>
                     {status === 'loading' && (
                       <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/60 border-t-white" />
                     )}
-                    <span>Send message</span>
+                    <span style={btnHovered && status !== 'loading' ? {
+                      background: 'linear-gradient(135deg, #ff0066 0%, #d4005a 40%, #6b0f4e 100%)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      backgroundClip: 'text',
+                    } : { color: 'white' }}>Send message</span>
                   </span>
                 </button>
 

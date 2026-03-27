@@ -295,6 +295,64 @@ html {
 }
 
 
+/* Effet rideau hover — nav links */
+.nav-link {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  padding: 4px 8px;
+  margin: -4px -8px;
+}
+.nav-link::before {
+  content: ‘’;
+  position: absolute;
+  inset: 0;
+  background: white;
+  transform: translateX(-101%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: -1;
+  border-radius: inherit;
+}
+.nav-link:hover::before {
+  transform: translateX(0);
+}
+.nav-link:hover {
+  background: linear-gradient(135deg, #ff0066 0%, #d4005a 40%, #6b0f4e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Effet rideau hover — bouton CTA */
+.cta-btn {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.cta-btn::before {
+  content: ‘’;
+  position: absolute;
+  inset: 0;
+  background: white;
+  transform: translateX(-101%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
+  border-radius: inherit;
+}
+.cta-btn:hover::before {
+  transform: translateX(0);
+}
+.cta-btn .cta-label {
+  position: relative;
+  z-index: 2;
+}
+.cta-btn:hover .cta-label {
+  background: linear-gradient(135deg, #ff0066 0%, #d4005a 40%, #6b0f4e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 /* ♿ Réduit toutes les animations si l’utilisateur l’a demandé */
 .reduce-motion * {
   animation: none !important;
