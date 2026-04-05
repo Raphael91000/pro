@@ -92,17 +92,17 @@ export default function Navbar() {
           width: "100%",
           padding: "16px 32px",
           borderRadius: "999px",
-          border: "1px solid rgba(255,255,255,0.6)",
-          background: "rgba(255,255,255,0.7)",
+          border: "1px solid rgba(255,255,255,0.25)",
+          backgroundImage: "linear-gradient(135deg, #ff0066 0%, #d4005a 40%, #6b0f4e 100%)",
           backdropFilter: "blur(20px)",
           WebkitBackdropFilter: "blur(20px)",
-          boxShadow: "0 8px 32px -8px rgba(15,23,42,0.12)",
+          boxShadow: "0 8px 32px -8px rgba(180,0,80,0.35)",
           boxSizing: "border-box",
         }}
           onClick={(e) => e.stopPropagation()}
         >
           {/* Logo */}
-          <a href="#" style={{ ...gradientText, fontSize: 22, fontWeight: 900, letterSpacing: "-0.03em", textDecoration: "none", flexShrink: 0 }}>
+          <a href="#" style={{ color: "white", fontSize: 22, fontWeight: 900, letterSpacing: "-0.03em", textDecoration: "none", flexShrink: 0 }}>
             Raphael
           </a>
 
@@ -110,7 +110,7 @@ export default function Navbar() {
           {!isMobile && (
             <div style={{ display: "flex", alignItems: "center", gap: 32, marginLeft: 32 }}>
               {links.map((l) => (
-                <a key={l.label} href={l.href} className="nav-link" style={{ fontSize: 16, fontWeight: 500, color: "#475569", textDecoration: "none" }}>
+                <a key={l.label} href={l.href} className="nav-link" style={{ fontSize: 16, fontWeight: 500, color: "rgba(255,255,255,0.85)", textDecoration: "none" }}>
                   {l.label}
                 </a>
               ))}
@@ -124,7 +124,7 @@ export default function Navbar() {
               onMouseEnter={() => setCtaHovered(true)}
               onMouseLeave={() => setCtaHovered(false)}
               style={{
-                ...gradientBg,
+                background: "white",
                 marginLeft: "auto",
                 padding: "10px 22px",
                 borderRadius: "999px",
@@ -141,7 +141,7 @@ export default function Navbar() {
               <span style={{
                 position: "absolute",
                 inset: 0,
-                background: "white",
+                backgroundImage: "linear-gradient(135deg, #ff0066 0%, #d4005a 40%, #6b0f4e 100%)",
                 borderRadius: "inherit",
                 transform: ctaHovered ? "translateX(0)" : "translateX(-101%)",
                 transition: "transform 0.35s cubic-bezier(0.4,0,0.2,1)",
@@ -149,12 +149,12 @@ export default function Navbar() {
               <span style={{
                 position: "relative",
                 zIndex: 1,
-                ...(ctaHovered ? {
+                ...(ctaHovered ? { color: "white" } : {
                   background: "linear-gradient(135deg, #ff0066 0%, #d4005a 40%, #6b0f4e 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
-                } : { color: "white" }),
+                }),
               }}>Let's talk</span>
             </a>
           )}
@@ -177,9 +177,9 @@ export default function Navbar() {
                 WebkitTapHighlightColor: "transparent",
               }}
             >
-              <span style={{ display: "block", height: 2, width: 24, background: "#334155", borderRadius: 2, transition: "all 0.3s", transformOrigin: "center", transform: menuOpen ? "rotate(45deg) translateY(7px)" : "none" }} />
-              <span style={{ display: "block", height: 2, width: 24, background: "#334155", borderRadius: 2, transition: "all 0.3s", opacity: menuOpen ? 0 : 1 }} />
-              <span style={{ display: "block", height: 2, width: 24, background: "#334155", borderRadius: 2, transition: "all 0.3s", transformOrigin: "center", transform: menuOpen ? "rotate(-45deg) translateY(-7px)" : "none" }} />
+              <span style={{ display: "block", height: 2, width: 24, background: "white", borderRadius: 2, transition: "all 0.3s", transformOrigin: "center", transform: menuOpen ? "rotate(45deg) translateY(7px)" : "none" }} />
+              <span style={{ display: "block", height: 2, width: 24, background: "white", borderRadius: 2, transition: "all 0.3s", opacity: menuOpen ? 0 : 1 }} />
+              <span style={{ display: "block", height: 2, width: 24, background: "white", borderRadius: 2, transition: "all 0.3s", transformOrigin: "center", transform: menuOpen ? "rotate(-45deg) translateY(-7px)" : "none" }} />
             </button>
           )}
         </nav>
