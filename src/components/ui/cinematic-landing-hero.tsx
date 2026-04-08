@@ -201,6 +201,7 @@ const webOptions = [
   { label: "Codio",    href: "https://www.codio.studio/" },
   { label: "NeuroBot", href: "https://error404-two.vercel.app/" },
   { label: "Altus",    href: "https://altus-tau.vercel.app/" },
+  { label: "KOHI",     href: "https://kohi-five.vercel.app/" },
 ];
 
 const GRAD = "linear-gradient(135deg, #ff0066 0%, #d4005a 40%, #6b0f4e 100%)";
